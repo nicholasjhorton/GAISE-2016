@@ -1,0 +1,74 @@
+\chapter{Appendix C: Example of Using Technology}
+\vspace{-.53in}
+   \noindent\color{graylight}\rule[0cm]{3.25in}{0.03cm} \\
+    \noindent\color{graylight}\rule[0.4cm]{3.25in}{0.03cm} \\
+\color{black}
+%\vspace{-.25in}
+
+\noindent\smallcaps{This example starts with a real-world situation, has students do a physical simulation using cards, and then brings in computer technology to automate the simulation. }
+
+\section{\textbf{A Technology-Based Simulation to Examine the Effectiveness of Treatments for Cocaine Addiction}}
+A study on the treatment of cocaine addiction described the results of an experiment comparing two drugs for helping addicts stay off cocaine (D.M. Barnes, ``Breaking the Cycle of Cocaine Addiction'', \textit{Science}, Vol. 241, 1988,  pp. 1029-1030).  A group of 48 cocaine addicts who were seeking treatment were randomly divided into two groups of 24.  One group was treated with a new drug called desipramine, while the other group was given lithium.  The results are summarized in the table below, where we consider patients who do not relapse as successfully treated. 
+
+\begin{table}[!ht]
+\begin{center}
+\begin{tabular}{|l|c|c|}
+\hline
+& No Relapse & Relapse\\
+\hline
+Desipramine & 14 &  10\\
+\hline
+Lithium & 6 & 18\\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+While we observe that desipramine was more successful than lithium in this particular experiment, can we conclude that the improvement is statistically significant. (i.e., Would we expect to see such a large difference if the drugs were equally effective and it was just the random assignment process that happened to get so many more successful cases in the desipramine group?)  We will address this question through simulation, first using a physical demonstration based on shuffling cards, then with a computer simulation that allows us to see the differences for many random assignments of the addicts to the treatment groups. \\
+\vspace{12pt}
+\newpage
+
+\noindent\textbf{\textit{Physical Simulation}}\\
+\vspace{3pt}
+Take a deck of 54 playing cards (including two jokers) and remove six of the black cards (spades or clubs).  The remaining deck should match the subjects in the cocaine experiment with all the red cards and the jokers representing patients who relapsed and the 20 black cards representing patients who were treated successfully.  If we shuffle the deck and deal out two piles of 24 cards each, we will simulate the assignment of addicts to the two treatment groups when the success does not depend on which drug they take. Do so and fill in the two-way table with the ``success'' (black cards) and ``relapse'' (red/jokers) counts for each group.
+
+\begin{table}[!ht]
+\begin{center}
+\begin{tabular}{|l|c|c|}
+\hline
+& No Relapse & Relapse\\
+\hline
+Desipramine &  &  \\
+\hline
+Lithium &  & \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+Note that once you know one number in the table, you can fill in the rest, as you know there are 24 in each treatment group and 20 will not relapse while 28 will relapse (that is why we sometimes say there is just one degree of freedom in the 2x2 table).  To keep things simple then, we can just keep track of one count, such as the number of ``no relapse'' in the desipramine group. 
+
+Shuffle all the cards again, deal 24 for the desipramine group, and count the number of black cards. 
+
+\begin{center}
+Number of ``no relapse'' in desipramine group = \underline{\hspace{.5in}}
+\end{center}
+
+Pool the results for your class (counting \# of black cards in each random group of 24 cards assigned to the ``desipramine'' group) in a dotplot.  How often was the number of black cards as large as (or larger than) the 14 cases observed in the actual experiment? 
+
+The \textit{p}-value of the original data is the proportion, assuming both drugs are equally effective, of random assignments that have 14 or more ``no relapse'' cases going to the desipramine group.  Estimate this proportion using the data in your class dotplot. \\
+\vspace{12pt}
+
+\noindent\textbf{\textit{Computer Simulation}}\\
+\vspace{3pt}
+To get a more accurate estimate of the proportion of random assignments that put 14 or more no relapse cases into the desipramine group, we'll turn to a computer simulation. 
+
+Start with a data set (provided online) consisting of two columns and 48 rows.  The first column (Treatment) has the value ``desipramine'' in the first 24 rows and ``lithium'' in the remaining 24 rows.  The second column (Result) has the values ``no relapse'' and ``relapse'' to match the data in the original 2x2 table from the cocaine experiment. 
+
+Have the computer permute the values in the ``Result'' column to represent a new random assignment of subjects to the treatment groups where the outcome does not depend on which drug was taken.  Count the number of ``no relapse'' cases in the desipramine treatment group and have the result stored somewhere.   Automate this process to repeat 1,000 times\footnote{\textit{Some technology alternatives:} The most difficult step here is to automate the simulations to record the counts for many random assignments.  Some packages, such as Fathom, have easy-to-use tools designed for exactly such purposes.  Others, such as Minitab, allow a bit of programming through macros that can be built in advance and repeated in a loop.  A somewhat less enlightening simulation could be accomplished with a stat package that allows generation of random data from a hypergeometric distribution, although students would then lose the connection to the physical randomizations.  Finally, an ambitious instructor could construct (or possibly find on the web) an applet to perform the required simulations and collect the results.}. 
+
+Look at a histogram or dotplot of the distribution of counts for the 1,000 simulations.  Does it seem unusual to have as many as 14 ``no relapse'' cases in the desipramine group? 
+
+Count the number of simulations that have 14 or more successes in the desipramine group (either from the graph, if feasible, or by sorting the simulated counts column) and divide by 1,000 to get another approximation of the \textit{p}-value for the original data.  
+
+Does it seem reasonable that the larger number (14) of successful cases appeared in the desipramine group by chance, or would it be more appropriate to conclude that desipramine probably works better than lithium at treating cocaine addiction? 
