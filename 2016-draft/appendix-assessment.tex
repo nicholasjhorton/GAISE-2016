@@ -431,7 +431,7 @@ For each of the following research questions (on the next page), indicate (by le
 \subsection{\textbf{\textit{Item 24}}}
 How accurate are radon detectors of a type sold to homeowners?  To answer this question, university researchers placed 12 detectors in a chamber that exposed them to 105 picocuries per liter of radon.  The detector readings found are below.  A printout of the descriptive statistics from Minitab follows. 
 
-\marginnote{\added{Provide more output (e.g., 95\% confidence interval?) to allow testing without calculation or use of a table?}}
+\marginnote{\added{XX could we provide more output (e.g., 95\% confidence interval?) to allow testing without calculation or use of a table?}}
 
 \begin{table}[!ht]
 \begin{center}
@@ -457,7 +457,7 @@ How accurate are radon detectors of a type sold to homeowners?  To answer this q
 \item Is there convincing evidence that the mean 20 readings of all detectors of this type differs from the true value of 105?  Perform the appropriate hypothesis test with $\alpha  = .05$.
 \item What is the Type I error associated with this problem?
 \item What is the Type II error associated with this problem?
-\item What is the probability of a type II error if the reading of the detectors is too low by 5 picocuries (really 100 when it should read 105)?
+\item What is the probability of a Type II error if the reading of the detectors is too low by 5 picocuries (really 100 when it should read 105)?
 \end{enumerate}
 
 
@@ -465,7 +465,7 @@ How accurate are radon detectors of a type sold to homeowners?  To answer this q
 According a U.S. Food and Drug Administration (FDA) study, a cup of coffee contains an average of 115 mg of caffeine, with the amount per cup ranging from 60 to 180 mg depending on the brewing method.  Suppose you want to repeat the FDA experiment to obtain an estimate of the mean caffeine content to within 5 mg with 95\% using your favorite brewing method.  In problems such as this, we can estimate the standard deviation of the population to be $\frac{1}{4}$ of the range. How many cups of coffee must you brew?  
 
 \subsection{\textbf{\textit{Item 26}}}
-An advertisement claims that by applying a particular drug, hair is restored to bald-headed men.  Outline the design of an experiment you would use to examine this claim.  Assume you have money to use 20 bald men in this experiment.  
+\replaced{An internet company is planning to test which of two online ad campaigns is more effective in generating clicks on their site.}{An advertisement claims that by applying a particular drug, hair is restored to bald-headed men.}  Outline the design of an experiment you would use to examine this claim.  Assume you have money to \replaced{place 500 ads for each of the two possible campaigns.}{use 20 bald men in this experiment.  }
 
 \subsection{\textbf{\textit{Item 27}}}
 A study of iron deficiency among infants compared samples of infants following different feeding regimens.  One group contained breast-fed infants, while the children in another group were fed a standard baby formula without any iron supplements.  Here are the summary results on blood hemoglobin levels at 12 months of age:
@@ -476,20 +476,21 @@ A study of iron deficiency among infants compared samples of infants following d
 \hline
 Group & N & $\bar{X}$ & s\\
 \hline
-Breast-fed	 & 23 & 13.3 & 1.7\\
-Formula & 19 & 12.4 & 1.8\\
+Breast-fed	 & \replaced{230}{23} & 13.3 & 1.7\\
+Formula & \replaced{230}{19} & 12.4 & 1.8\\
 \hline
 \end{tabular}
 \end{center}
 \end{table}
 
+\marginnote{\added{XX Provide the t-value?  Make the sample sizes equal?  Provide the pooled standard error as well?  Provide a graphical display of the results of a permutation test?}}
 Assume that the blood hemoglobin levels in children (both breast-fed and formula-fed) are normally distributed.  Do a significance test to determine the statistical significance of the observed difference.
 
 \subsection{\textbf{\textit{Item 28}}}
 Which implies a stronger linear relationship, a correlation of $+0.4$ or a correlation of $-0.6$?  Briefly explain your choice.
 
 \subsection{\textbf{\textit{Item 29}}}
-A group of physicians subjected the polygraph to the same careful testing given to medical diagnostic tests.  They found that if 1,000 people were subjected to the polygraph and 500 told the truth and 500 lied, the polygraph would indicate that approximately 185 of the truth-tellers were liars and 120 of the liars were truth-tellers.  In the application of the polygraph test, an individual is presumed to be a truth-teller until indicated that s/he is a liar. What is a type I error in the context of this problem?  What is the probability of a type I error in the context of this problem?  What is a type II error in the context of this problem?  What is the probability of a type II error in the context of this problem?
+A group of physicians subjected the polygraph to the same careful testing given to medical diagnostic tests.  They found that if 1,000 people were subjected to the polygraph and 500 told the truth and 500 lied, the polygraph would indicate that approximately 185 of the truth-tellers were liars and 120 of the liars were truth-tellers.  In the application of the polygraph test, an individual is presumed to be a truth-teller until indicated that s/he is a liar. What is a Type I error in the context of this problem?  What is the probability of a Type I error in the context of this problem?  What is a Type II error in the context of this problem?  What is the probability of a Type II error in the context of this problem?
 
 
 \subsection{\textbf{\textit{Item 30}}}
@@ -513,8 +514,8 @@ Audiologists recently developed a rehabilitation program for hearing-impaired pa
 \subsection{\textbf{\textit{Item 31}}}
 A utility company was interested in knowing if agricultural customers would use less electricity during peak hours if their rates were different during those hours.  Customers were randomly assigned to continue to get standard rates or to receive the time-of-day structure.  Special meters were attached that recorded usage during peak and off-peak hours; the technician who read the meter did not know what rate structure each customer had.
 \begin{enumerate}[leftmargin=1cm, itemsep=.2em]
-\item Is this an observation study or experiment?  Defend your answer.
-\item What is the explanatory and response variable?
+\item Is this an observation\added{al} study or experiment?  Defend your answer.
+\item What \replaced{are}{is} the explanatory and response variable\added{s}?
 \item List a potential confounding variable in this work.
 \item Is this a matched-pair design?  Defend your answer.
 \end{enumerate}
@@ -529,7 +530,7 @@ At the beginning of the semester, we measured the width of a page in our statist
  
 \begin{enumerate}[leftmargin=1cm, itemsep=.2em]
 \item Describe the distribution.
-\item Estimate the correlation with and without the starred point.
+\item \replaced{What effect does the starred point have on the correlation?  That is, if the starred point were removed, how would be correlation change, if at all?}{Estimate the correlation with and without the starred point.}
 \end{enumerate}
 
 \subsection{\textbf{\textit{Item 33}}}
@@ -603,6 +604,64 @@ treatment groups breaks the association between
 \end{enumerate}
 }
 
+\added{\subsection{\textbf{\textit{New Item 39}}}}
+\added{A high school statistics class wants to estimate the average number of chocolate chips in a generic brand of chocolate chip cookies. They collect a random sample of cookies, count the chips in each cookie, and calculate a 95\% confidence interval for the average number of chips per cookie (18.6 to 21.3). Indicate if each is VALID or INVALID.}
+\marginnote{\added{Multiple True/False items of this sort that can provide very useful information. If there is a single correct understanding for a statistical concept, but several known misunderstandings for the same concept, a multiple T/F item can provide information on whether or not a student correctly recognizes each of the misunderstandings as false or invalid.}}
+\begin{enumerate} [leftmargin=1cm, itemsep=.2em]
+\item We are 95\% certain that the confidence interval of 18.6 to 21.3 includes the true average number of chocolate chips per cookie.     VALID   INVALID
+\item We are 95\% certain that each cookie for this brand has approximately 18.6 to 21.3 chocolate chips.     VALID   INVALID
+\item We expect 95\% of the cookies to have between 18.6 and 21.3 chocolate chips.     VALID   INVALID
+\end{enumerate}
+
+\added{\subsection{\textbf{\textit{New Item 40}}}}
+\added{Suppose that you have a very big container with 1000 candies in it; 600 are red and 400 are yellow. The candies are all mixed up in the container. With eyes closed, students draw 10 candies, one at a time. They record whether each candy was red or yellow, and then replace and remix the candies. The teacher asked each student to do this six times. Kate, Dana, and Minh decided to play a trick on their teacher. Only one of them actually did the experiment, while the other two just made up their data. Below are their reports, where R = red candy and Y = yellow candy.}
+\marginnote{\added{XX Candies as motivation?  Should we note that we need to move beyond M\&M's?}}
+\begin{verbatim}
+Kate:                Dana:                Minh:
+RRYRYRRYYR (6 red)   RYYRRRYRRY (6 red)   RRYRYRRRRY (7 red)
+YRRYRRRYRY (6 red)   YRYRRYYRRY (3 red)   RYYYRRRRRR (7 red)
+RRYRYRRRYY (6 red)   RRYRRRYRRR (8 red)   YRRRYYRRYY (5 red)
+RYRRRYRYRY (6 red)   YRYYYYYYYY (1 red)   RRRRRYRRYR (8 red)
+YRRYRRYYRR (6 red)   RRRRRRRRYR (9 red)   RYRRYYYRRR (6 red)
+RRRYRYYRYR (6 red)   RYYRYYRRYY (4 red)   YRYRYRRRRR (7 red)
+\end{verbatim}
+\added{Which student do you think is most likely to have done the experiment?}
+
+\added{\subsection{\textbf{\textit{New Item 41}}}}
+
+\added{Consider an observational study of the effects of second-hand smoke on
+health in which we want to compare non-smokers (i) who live with a smoker
+to (ii) those who do not live with a smoker. There are two ways in which
+independence is relevant in the sampling and data collection process. (a)
+Give an example in which one type of independence is met but the other is
+not; (b) give an example in which the other type of independence is met but
+the first is not.}
+
+
+\added{\subsection{\textbf{\textit{New Item 42}}}}
+
+\added{A terse report of a statistical test is given below:
+\begin{quote}
+The P-value for a hypothesis test with hypotheses $H_0: \mu = 3$ versus $H_1: \mu \neq 3$ is 0.04.
+\end{quote}
+
+Critique the following responses for clarity, completeness  and correctness.}
+
+\begin{enumerate} [leftmargin=1cm, itemsep=.2em]
+\item This means that the probability of getting our test statistic is .04.
+
+\item This means that the probability of getting a test statistic at least as extreme as ours is .04.
+
+\item This means that if the null hypothesis is true, the probability of getting a test statistics at least as extreme as ours is .04
+
+\item This means that if the null hypothesis is true, the probability of getting a test statistic less than or equal to the one we got is .04
+
+\item This means that it is very unlikely that the result that was used to compute this P-value would have happened by pure chance alone, assuming that  H0 is true. Therefore we could conclude that the evidence is against the Null Hypothesis , and H0 is probably  not true.
+
+\item The sentence means that assuming the population average is equal to three, the likelihood of getting an average as large or larger than we got for our sample is about 4 percent. 
+
+\item The p-value is the probability that the data will be as extreme or more extreme as the alternate hypothesis suggests.
+\end{enumerate}
 
 
 \section{\textbf{\added{Examples of Assessments for Presentations and Projects}}}
