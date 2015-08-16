@@ -197,15 +197,15 @@ xyplot(sat ~ salary, type=c("r", "p"), groups=fracgrp, auto.key=TRUE,
 \end{center}
 \end{figure}
 
-This type of multivariable thinking is critical to make sense of the observational data around us.  If students
-don't see some tools for disentangling complex relationships, they may dismiss statistics as an old-school
-discipline only suitable for small sample inference of randomized studies.
 \marginnote{
 Another natural approach to develop such understanding is multiple regression.
 While this is not a traditional topic included in introductory statistics, an increasing number of textbooks
 and courses are incorporating the basic principles (often purely as a descriptive summarization of the data).
 In a multiple regression model that controls for the fraction of students taking the SAT variable, the
 sign of the slope parameter for teacher salary flips from negative to positive.}  
+This type of multivariable thinking is critical to make sense of the observational data around us.  If students
+don't see some tools for disentangling complex relationships, they may dismiss statistics as an old-school
+discipline only suitable for small sample inference of randomized studies.
 
 
 
