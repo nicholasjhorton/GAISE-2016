@@ -66,7 +66,7 @@ All too often, this is considered the pinnacle of statistics.
 But most data that students see are not derived from a randomized trial with no dropout, full adherence, and sufficient blinding.  In these situations, students may be stymied by courses that only consider bivariate relationships.
 A concern is that students may be paralyzed by what is likely their only statistics course \cite{meng:2011}
 and not see the full potential for statistics as a foundation
-for learning from data.
+for learning from data\marginnote{See also Wild's ``On locating statistics in the world of finding out", \url{http://arxiv.org/abs/1507.05982.}}.
 
 
 The new ASA guidelines for undergraduate programs in statistics state that
@@ -83,6 +83,53 @@ What can we teach students in the first course?
 In this appendix we consider two simple examples where ``other factors" may arise where appropriate analyses can be undertaken through stratification.  Such an approach requires no inferential methods or advanced methods (though some instructors may incorporate other related concepts and approaches). 
 
 \section{\textbf{Smoking in Whickham}}
+
+
+A follow-up study of 1,314 people in Whickham, England characterized smoking
+status at baseline, then mortality after 10 years\cite{appl:1996}.  The data are provided in the
+following Table.
+
+
+<<whick1,warning=FALSE, message=FALSE,echo=FALSE>>=
+require(gmodels); require(mosaic)
+with(Whickham, CrossTable(smoker, outcome, prop.c=FALSE, prop.chisq=FALSE, prop.t=FALSE))
+@
+
+We see that the relative risk of dying (comparing smokers to non-smokers) is less than 1, since
+31.4\% of the non-smokers died, but only 23.9\% of the smokers.  
+What could explain this result?
+
+Let's consider stratification by age of the participants.  What's the relationship
+between smoking and mortality over a 10 year period for those age 18-44 at baseline?
+
+<<whick2,warning=FALSE, message=FALSE,echo=FALSE>>=
+require(gmodels); require(mosaic)
+Whickham <- mutate(Whickham, 
+  agegrp = cut(age, breaks=c(1, 44, 64, 100), labels=c("18-44", "45-64", "65+")))
+with(filter(Whickham, agegrp=="18-44"), CrossTable(smoker, outcome, prop.c=FALSE, prop.chisq=FALSE, prop.t=FALSE))
+@
+
+We see that mortality rates are low (5.3\% vs 3.5\% for smokers and non-smokers).
+Similar results are seen for the subjects who are between 45 and 64 years old.
+
+<<whick3,warning=FALSE, message=FALSE,echo=FALSE>>=
+require(gmodels); require(mosaic)
+with(filter(Whickham, agegrp=="45-64"), CrossTable(smoker, outcome, prop.c=FALSE, prop.chisq=FALSE, prop.t=FALSE))
+@
+
+Mortality rates are highest for the oldest subjects, but again smoking is 
+associated with higher mortality.
+<<whick4,warning=FALSE, message=FALSE,echo=FALSE>>=
+with(filter(Whickham, agegrp=="65+"), CrossTable(smoker, outcome, prop.c=FALSE, prop.chisq=FALSE, prop.t=FALSE))
+@
+
+
+Simple methods (stratification) can allow students to peer beyond two dimensions
+and control for the effects of a confounding factor.
+
+
+
+
 
 \section{\textbf{SAT scores and Teacher Salaries}}
 
@@ -159,57 +206,6 @@ While this is not a traditional topic included in introductory statistics, an in
 and courses are incorporating the basic principles (often purely as a descriptive summarization of the data).
 In a multiple regression model that controls for the fraction of students taking the SAT variable, the
 sign of the slope parameter for teacher salary flips from negative to positive.}  
-Without a background in these key design topics,
-data scientists may make errors in their interpretations.
 
 
-
-\begin{table}[!ht]
-\begin{center}
-\begin{tabular}{|l|l|l|l|l|l|l|}
-\hline
-X & 1 & 2 & 3 & 4 & 6 & 8\\
-\hline
-Y & 3 & 4 & 6 & 7 & 14 & 20\\
-\hline
-\end{tabular}
-\end{center}
-\end{table}
-
-
-
-\section{\textbf{Realistic Data (better, but still not the best)}}
-
-The data below show\marginnote{\textit{Critique: A context has been added that makes the exercise more appealing and shows students a practical use of statistics.}} the number of customers in each of six tables at a restaurant and the size of the tip left at each table at the end of the meal.  Use the data to find a least squares line for predicting the size of the tip from the number of diners at the table.  Use your result to predict the size of the tip at a table that has five diners. 
-
-\begin{table}[!ht]
-\begin{center}
-\begin{tabular}{|l|c|c|c|c|c|c|}
-\hline
-Diners & 1 & 2 & 3 & 4 & 6 & 8\\
-\hline
-Tip & \$3 & \$4 & \$6 & \$7 & \$14 & \$20\\
-\hline
-\end{tabular}
-\end{center}
-\end{table}
-
-
-\newpage
-\section{\textbf{Real Data (recommended)}}
-
-The data below\marginnote{\textit{Critique: Data are from a real situation that should be of interest to students taking the course.}}  show the quiz scores (out of 20) and the grades on the midterm exam (out of 100) for a sample of eight students who took this course last semester.  Use these data to find a least squares line for predicting the midterm score from the quiz score. 
-Assuming the quiz and midterm are of equal difficulty this semester and the same linear relationship applies this year, what is the predicted grade on the midterm for a student who got a score of 17 on the quiz? 
-
-\begin{table}[!ht]
-\begin{center}
-\begin{tabular}{|l|l|l|l|l|l|l|l|l|}
-\hline
-Quiz & 20 & 15 & 13 & 18 & 18 & 20 & 14 & 16\\
-\hline
-Midterm & 92 & 72 & 72 & 95 & 88 & 98 & 65 & 77\\
-\hline
-\end{tabular}
-\end{center}
-\end{table}
 
