@@ -1,3 +1,40 @@
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+
+
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+
+
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
 \chapter{Appendix E: Examples of Multivariable Thinking}
 \vspace{-.53in}
    \noindent\color{graylight}\rule[0cm]{3.25in}{0.03cm} \\
@@ -7,17 +44,20 @@
 
 \section{\textbf{Introduction}}
 
-Issues of confounding and bias arise commonly in many analyses that are labeled as data science.  Analysts working in these areas must be able to understand issues of design, confounding, and bias \cite{kaplan:fresh}.
-This is an area where statisticians bring great value.
+Issues of confounding and bias arise commonly in many analyses that are labeled as data science.  
 %They need repeated exposure to the
 %analysis of data to build their skills.
 
-The lack of appreciation for simple multivariable methods is a major limitation in too many of our courses.
+Simple multivariable methods are sometimes excluded from introductory statistics courses.
+These approaches represent an area where statistics bring great value, since
+issues of design, confounding, and bias are important for the analyses of experiments and 
+observational studies.
+
 Students are generally taught that
 if data arise from well conducted randomized trials, they can make causal conclusions using a two-sample t-test. 
-All too often, this is considered the pinnacle of statistics (see \citeasnoun{cobb:2007} for a dissenting view). 
-But most data that students see are not derived from a randomized trial with no dropout, full adherence, and sufficient blinding.  In these situations, students are stymied by the bivariate coverage of topics in the syllabi of the Advanced Placement Statistics and most
-intro stats courses.  I worry that students may be paralyzed by what is likely their only statistics course \cite{meng:2011}
+All too often, this is considered the pinnacle of statistics.
+But most data that students see are not derived from a randomized trial with no dropout, full adherence, and sufficient blinding.  In these situations, students may be stymied by courses that only consider bivariate relationships.
+A concern is that students may be paralyzed by what is likely their only statistics course \cite{meng:2011}
 and not see the full potential for statistics as a foundation
 for learning from data.
 
@@ -30,13 +70,34 @@ measured and unmeasured variables \cite{asa:2014}.
 This can't all happen in a single statistics course, but it is important that students are exposed to the basic principles
 early and often.
 
-What can we teach students in the first course?  Consider an example where statewide data from the mid-1990's are used to assess the association between average teacher salary in the state and average SAT (Scholastic Aptitude Test) scores for students \cite{gube:1999}.  These exams are used for college entry, and the results are sometimes used as a proxy for educational quality.  The leftmost
+The long laundry-list of possible topics for the first course along with expectations from client disciplines make it challenging to bring multivariate thinking into the mix.
+What can we teach students in the first course?  
+
+In this appendix we consider two simple examples where ``other factors" may arise where appropriate analyses can be undertaken through stratification.  Such an approach requires no inferential methods or advanced methods (though some instructors may incorporate other related concepts and approaches). 
+
+\section{\textbf{Smoking in Whickham}}
+
+
+Consider an example where statewide data from the mid-1990's are used to assess the association between average teacher salary in the state and average SAT (Scholastic Aptitude Test) scores for students \cite{gube:1999}.  These exams are used for college entry, and the results are sometimes used as a proxy for educational quality.  The leftmost
 graph in Figure \ref{fig:sat} displays the unconditional association between these variables.  There is a statistically significant negative relationship. The model predicts that a state with an average salary that is one thousand dollars
 higher than another would have SAT scores that are 5.54 points [95\% CI 8.82 to 2.26] lower.
 
 \begin{figure}[tbh]
 \begin{center}
-\includegraphics[height=3.8in,width=4.8in]{sat.png}
+<<message=FALSE>>=
+require(mosaic); require(mosaicData)
+trellis.par.set(theme=col.mosaic(bw=TRUE)); options(digits=3)
+
+mod1 = lm(sat ~ salary, data=SAT); confint(mod1)
+
+mod2 = lm(sat ~ salary + frac, data=SAT); confint(mod2)
+
+SAT = transform(SAT, fracgrp = cut(frac, breaks=c(0, 22, 49, 81),
+labels=c("low fraction", "medium fraction", "high fraction")))
+plot1 = xyplot(sat ~ salary, type=c("r", "p"),
+               xlab="Average teacher salary",
+               ylab="State average SAT score", data=SAT)
+@
 \caption{Left: unconditional association of state average teacher salary with average SAT score; Right: association after accounting for the fraction of students taking the SAT in that state}
 \label{fig:sat}
 \end{center}
