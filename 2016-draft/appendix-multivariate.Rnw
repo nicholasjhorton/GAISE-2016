@@ -1,0 +1,60 @@
+\chapter{Appendix D: Examples of Naked, Realistic, and Real Data}
+\vspace{-.53in}
+   \noindent\color{graylight}\rule[0cm]{3.25in}{0.03cm} \\
+    \noindent\color{graylight}\rule[0.4cm]{3.25in}{0.03cm} \\
+\color{black}
+\vspace{-.25in}
+
+\section{\textbf{Naked Data (not recommended)}}
+
+Find the least squares \marginnote{\textit{Critique: Made-up data with no context (not recommended). The problem is purely computational with no possibility of meaningful interpretation.}} line for the data below.  Use it to predict Y when X=5.
+
+\begin{table}[!ht]
+\begin{center}
+\begin{tabular}{|l|l|l|l|l|l|l|}
+\hline
+X & 1 & 2 & 3 & 4 & 6 & 8\\
+\hline
+Y & 3 & 4 & 6 & 7 & 14 & 20\\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+
+
+\section{\textbf{Realistic Data (better, but still not the best)}}
+
+The data below show\marginnote{\textit{Critique: A context has been added that makes the exercise more appealing and shows students a practical use of statistics.}} the number of customers in each of six tables at a restaurant and the size of the tip left at each table at the end of the meal.  Use the data to find a least squares line for predicting the size of the tip from the number of diners at the table.  Use your result to predict the size of the tip at a table that has five diners. 
+
+\begin{table}[!ht]
+\begin{center}
+\begin{tabular}{|l|c|c|c|c|c|c|}
+\hline
+Diners & 1 & 2 & 3 & 4 & 6 & 8\\
+\hline
+Tip & \$3 & \$4 & \$6 & \$7 & \$14 & \$20\\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+
+\newpage
+\section{\textbf{Real Data (recommended)}}
+
+The data below\marginnote{\textit{Critique: Data are from a real situation that should be of interest to students taking the course.}}  show the quiz scores (out of 20) and the grades on the midterm exam (out of 100) for a sample of eight students who took this course last semester.  Use these data to find a least squares line for predicting the midterm score from the quiz score. 
+Assuming the quiz and midterm are of equal difficulty this semester and the same linear relationship applies this year, what is the predicted grade on the midterm for a student who got a score of 17 on the quiz? 
+
+\begin{table}[!ht]
+\begin{center}
+\begin{tabular}{|l|l|l|l|l|l|l|l|l|}
+\hline
+Quiz & 20 & 15 & 13 & 18 & 18 & 20 & 14 & 16\\
+\hline
+Midterm & 92 & 72 & 72 & 95 & 88 & 98 & 65 & 77\\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
