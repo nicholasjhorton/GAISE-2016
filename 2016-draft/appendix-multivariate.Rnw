@@ -4,6 +4,15 @@
 \definecolor{errorcolor}{rgb}{1, 0, 0}
 \definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
 
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
 
 \newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
 \newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
@@ -35,7 +44,7 @@
  \at@end@of@kframe}
 \makeatother
 
-\chapter{Appendix E: Examples of Multivariable Thinking}
+\chapter{Appendix E: Multivariable Thinking}
 \vspace{-.53in}
    \noindent\color{graylight}\rule[0cm]{3.25in}{0.03cm} \\
     \noindent\color{graylight}\rule[0.4cm]{3.25in}{0.03cm} \\
@@ -44,15 +53,13 @@
 
 \section{\textbf{Introduction}}
 
-Issues of confounding and bias arise commonly in many analyses that are labeled as data science.  
-%They need repeated exposure to the
-%analysis of data to build their skills.
-
-Simple multivariable methods are sometimes excluded from introductory statistics courses.
-These approaches represent an area where statistics bring great value, since
-issues of design, confounding, and bias are important for the analyses of experiments and 
+Statistics brings great value to the analysis of data by considering
+issues of design, confounding, and bias.  These topics are important
+for the analyses of experiments and 
 observational studies.
 
+Despite the importance of these underlying concepts,
+simple multivariable methods are sometimes excluded from introductory statistics courses.
 Students are generally taught that
 if data arise from well conducted randomized trials, they can make causal conclusions using a two-sample t-test. 
 All too often, this is considered the pinnacle of statistics.
@@ -77,65 +84,84 @@ In this appendix we consider two simple examples where ``other factors" may aris
 
 \section{\textbf{Smoking in Whickham}}
 
+\section{\textbf{SAT scores and Teacher Salaries}}
 
-Consider an example where statewide data from the mid-1990's are used to assess the association between average teacher salary in the state and average SAT (Scholastic Aptitude Test) scores for students \cite{gube:1999}.  These exams are used for college entry, and the results are sometimes used as a proxy for educational quality.  The leftmost
+Consider an example where statewide data from the mid-1990's are used to assess the association between average teacher salary in the state and average SAT (Scholastic Aptitude Test) scores for students 
+\cite{gube:1999} \cite{hort:2015}.  These exams are sometimes used as a proxy for educational quality.  The leftmost
 graph in Figure \ref{fig:sat} displays the unconditional association between these variables.  There is a statistically significant negative relationship. The model predicts that a state with an average salary that is one thousand dollars
-higher than another would have SAT scores that are 5.54 points [95\% CI 8.82 to 2.26] lower.
+higher than another would have SAT scores that are on average 5.54 points lower.
 
-\begin{figure}[tbh]
+\begin{figure}[tbhp]
 \begin{center}
-<<message=FALSE>>=
+<<sat1,fig.height=3.8,fig.width=5.8,message=FALSE,echo=FALSE,warning=FALSE>>=
 require(mosaic); require(mosaicData)
 trellis.par.set(theme=col.mosaic(bw=TRUE)); options(digits=3)
+mod1 <- lm(sat ~ salary, data=SAT)
 
-mod1 = lm(sat ~ salary, data=SAT); confint(mod1)
+mod2 <- lm(sat ~ salary + frac, data=SAT)
 
-mod2 = lm(sat ~ salary + frac, data=SAT); confint(mod2)
-
-SAT = transform(SAT, fracgrp = cut(frac, breaks=c(0, 22, 49, 81),
+SAT <- transform(SAT, fracgrp = cut(frac, breaks=c(0, 22, 49, 81),
 labels=c("low fraction", "medium fraction", "high fraction")))
-plot1 = xyplot(sat ~ salary, type=c("r", "p"),
-               xlab="Average teacher salary",
+xyplot(sat ~ salary, type=c("r", "p"),
+               xlab="Average teacher salary (in thousands of $)",
                ylab="State average SAT score", data=SAT)
 @
-\caption{Left: unconditional association of state average teacher salary with average SAT score; Right: association after accounting for the fraction of students taking the SAT in that state}
+\caption{Unconditional association of state average teacher salary with average SAT score}
 \label{fig:sat}
 \end{center}
 \end{figure}
 
+
 But the real story is hidden behind one of the ``other factors" that we warn students about but don't generally teach how to address!  The proportion of students taking the SAT varies dramatically by region, as do teacher salaries.
-In the midwest and plains states, where teacher salaries tend to be lower, relatively few high school students take the SAT exam.  These are
+In the midwest and plains states, where teacher salaries tend to be lower, relatively few high school students take the SAT exam.  
+These are
 typically the top students who are planning to attend college out of state, while many others take the
-alternative standardized ACT test.  The net result is that the fraction
-taking the SAT is a confounding factor.  In a multiple regression model that controls for this variable, the
-sign of the slope parameter flips.  The new model predicts that a state with an average salary that is one
-thousand dollars higher than another would expect to have SAT scores that are 2.18 points higher [95\% CI 0.11 to  4.25].
+alternative standardized ACT test.  For each of the three groups of states, the association is 
+non-negative.  The net result is that the fraction
+taking the SAT is a confounding factor.  
 
 This problem is a continuous example of Simpson's paradox.
-There is no automated data mining or machine learning methods that can get close to the right answer if the stratifying variable is not collected. However, statistical thinking with an appreciation of Simpson's paradox would alert a student to \emph{look for} the hidden confounding variables.
-To tackle this problem, students need to understand multivariable modeling.
+Statistical thinking with an appreciation of Simpson's paradox would alert a student to \emph{look for} the hidden confounding variables.
+To tackle this problem, students need to know that multivariable modeling exists (but not all aspects
+of how it can be utilized).
 
-One natural approach to develop such understanding is multiple regression.
-While this is not a traditional topic included in introductory statistics, an increasing number of textbooks
-and courses are incorporating the basic principles (often purely as a descriptive summarization of the data).
+Within an introductory statistics course, the use of stratification by a potential confounder
+By splitting
+states up into groups based on the fraction of
+students taking the SAT it is possible to account for this confounder and use 
+bivariate methods to assess the relationship for each of the groups.
 
-Another option for this analysis is even simpler: the use of stratification.
-We can arbitrarily split the states up into groups based on the fraction of
-students taking the SAT.  The rightmost scatterplot in Figure \ref{fig:sat} displays a grouping of
+The scatterplot in Figure \ref{fig:sat2} displays a grouping of
 states with 0-22\% of students (``low fraction", top line), 23-49\% of students (``medium fraction", middle line), and
 50-81\% (``high fraction", bottom line). The story is clear: there is a positive or flat relationship between teacher salary
 and SAT score for each of these groups, but when we average over them, we observe a negative relationship.
 
-Shattuck would have recognized this problem: the mortality estimates in Figure \ref{fig:shattuck}
-are multivariate, with discrete strata of sub-populations.
+
+
+\begin{figure}[tpbh]
+\begin{center}
+<<sat2,fig.height=3.8,fig.width=5.8,echo=FALSE,message=FALSE,warning=FALSE>>=
+xyplot(sat ~ salary, type=c("r", "p"), groups=fracgrp, auto.key=TRUE, 
+       xlab="Average teacher salary (in thousands of $)", 
+       ylab="State average SAT score", data=SAT)
+@
+\caption{Association after accounting for the fraction of students taking the SAT in that state}
+\label{fig:sat2}
+\end{center}
+\end{figure}
+
 This type of multivariable thinking is critical to make sense of the observational data around us.  If students
 don't see some tools for disentangling complex relationships, they may dismiss statistics as an old-school
 discipline only suitable for small sample inference of randomized studies.
+\marginnote{
+Another natural approach to develop such understanding is multiple regression.
+While this is not a traditional topic included in introductory statistics, an increasing number of textbooks
+and courses are incorporating the basic principles (often purely as a descriptive summarization of the data).
+In a multiple regression model that controls for the fraction of students taking the SAT variable, the
+sign of the slope parameter for teacher salary flips from negative to positive.}  
 Without a background in these key design topics,
 data scientists may make errors in their interpretations.
 
-
-Find the least squares \marginnote{\textit{Critique: Made-up data with no context (not recommended). The problem is purely computational with no possibility of meaningful interpretation.}} line for the data below.  Use it to predict Y when X=5.
 
 
 \begin{table}[!ht]
