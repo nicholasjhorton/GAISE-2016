@@ -159,12 +159,70 @@ require(gmodels); require(mosaic)
 We see that mortality rates are low for this age group, but higher for smokers than non-smokers (5.3\% for smokers vs 3.5\% for non-smokers).  For this example, since the baserate for mortality is so low, the
 information value of the mosaicplot is low.
 
-Similar results are seen for the subjects who are between 45--64 years old as displayed in Table \ref{tab:whick3} and Figure \ref{fig:whick3}.
-This is a classic example of Simpson's paradox\cite{simp:1951}.
+Similar results are seen 
+in Table \ref{tab:whick3} and Figure \ref{fig:whick3}
+for subjects who are between 45--64 years old at baseline: smokers have a higher
+probability of mortality than non-smokers.
+\begin{table}[!ht]
+\begin{center}
+\begin{tabular}{|l|l|l|}
+\hline
+SMOKER & Alive & Dead \\ \hline
+No & 147 (73.5\%) & 53 (26.5\%) \\ \hline
+Yes & 167 (67.6\%) & 80 (32.4\%) \\ \hline
+\end{tabular}
+\caption{Distribution of smoking status and mortality status (after 10 years) for 45--64 year olds (at baseline) from the Whickham study}
+\label{tab:whick3}
+\end{center}
+\end{table}
+
+\begin{figure}[tbhp]
+<<whick3p,warning=FALSE, fig.height=3.8,message=FALSE,echo=FALSE>>=
+mosaicplot(tally(~ smoker + outcome, data=filter(Whickham, agegrp=="45-64")), ylab="mortality status (after 10 years)",
+  xlab="Age group", main="")
+# with(Whickham, CrossTable(smoker, outcome, prop.c=FALSE, prop.chisq=FALSE, prop.t=FALSE))
+@
+\caption{Mosaicplot representing the association between mortality and smoking status for 45--64 year olds in the Whickham study}
+\label{fig:whick3}
+\end{figure}
+
+Finally, 
+Table \ref{tab:whick4} and Figure \ref{fig:whick4} display the results for subjects who were
+65 or older at baseline.
+We observe that almost all of these individuals died during the followup period, but the 
+probability of dying was higher for smokers than non-smokers.
+
+This example represents a classic example of \emph{Simpson's paradox}\cite{simp:1951}, where 
+overall smoking is ``protective", but within each age group smokers have a higher probability
+of dying than non-smokers.
+
+\begin{table}[htpb]
+\begin{center}
+\begin{tabular}{|l|l|l|}
+\hline
+SMOKER & Alive & Dead \\ \hline
+No & 28 (14.5\%) & 165 (85.5\%) \\ \hline
+Yes & 6 (12.0\%) & 44 (88.0\%) \\ \hline
+\end{tabular}
+\caption{Distribution of smoking status and mortality status (after 10 years) for those 65 and older
+(at baseline) from the Whickham study}
+\label{tab:whick4}
+\end{center}
+\end{table}
+
+\begin{figure}[tbhp]
+<<whick4p,warning=FALSE, fig.height=3.8,message=FALSE,echo=FALSE>>=
+mosaicplot(tally(~ smoker + outcome, data=filter(Whickham, agegrp=="65+")), ylab="mortality status (after 10 years)",
+  xlab="Age group", main="")
+@
+\caption{Mosaicplot representing the association between mortality and smoking status for those 65 years olds or older at baseline in the Whickham study}
+\label{fig:whick4}
+\end{figure}
+
 
 <<whick3,warning=FALSE, message=FALSE,echo=FALSE>>=
 require(gmodels); require(mosaic)
-with(filter(Whickham, agegrp=="45-64"), CrossTable(smoker, outcome, prop.c=FALSE, prop.chisq=FALSE, prop.t=FALSE))
+#with(filter(Whickham, agegrp=="45-64"), CrossTable(smoker, outcome, prop.c=FALSE, prop.chisq=FALSE, prop.t=FALSE))
 @
 
 \begin{figure}[tbhp]
@@ -189,10 +247,12 @@ study}
 \label{fig:whickage2}
 \end{figure}
 
-Mortality rates are highest for the oldest subjects (see Figure \ref{fig:whickage1}) but smoking is also associated with age (see Figure \ref{fig:whickage2}).  After controlling for age, smokers have a higher
+How can this be happening?
+
+We note that mortality rates are highest for the oldest subjects (see Figure \ref{fig:whickage1}) but smoking is also associated with age (see Figure \ref{fig:whickage2}).  After controlling for age, smokers have a higher
 rate of mortality than non-smokers in this study.
 <<whick4,warning=FALSE, message=FALSE,echo=FALSE>>=
-with(filter(Whickham, agegrp=="65+"), CrossTable(smoker, outcome, prop.c=FALSE, prop.chisq=FALSE, prop.t=FALSE))
+#with(filter(Whickham, agegrp=="65+"), CrossTable(smoker, outcome, prop.c=FALSE, prop.chisq=FALSE, prop.t=FALSE))
 @
 
 
