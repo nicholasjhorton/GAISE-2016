@@ -53,34 +53,16 @@
 
 \section{\textbf{Introduction}}
 
-Statistics brings great value to the analysis of data by considering
-issues of design, confounding, and bias.  These topics are important
-for the analyses of experiments and 
-observational studies.
+The new ASA guidelines for undergraduate programs in statistics recommend that students obtain a clear understanding of principles of statistical design and tools to assess and account for the possible impact of other measured and unmeasured variables\cite{asa:2014}. 
+\marginnote{See also Wild's ``On locating statistics in the world of finding out", \url{http://arxiv.org/abs/1507.05982.}}%
+An introductory statistics course can't cover these topics in depth, but it is important to expose students to them even in their first course\cite{meng:2011}.
 
-Despite the importance of these underlying concepts,
-simple multivariable methods are sometimes excluded from introductory statistics courses.
-Students are generally taught that
-if data arise from well conducted randomized trials, they can make causal conclusions using a two-sample t-test. 
-All too often, this is considered the pinnacle of statistics.
-But most data that students see are not derived from a randomized trial with no dropout, full adherence, and sufficient blinding.  In these situations, students may be stymied by courses that only consider bivariate relationships.
-A concern is that students may be paralyzed by what is likely their only statistics course \cite{meng:2011}
-and not see the full potential for statistics as a foundation
-for learning from data\marginnote{See also Wild's ``On locating statistics in the world of finding out", \url{http://arxiv.org/abs/1507.05982.}}.
+Perhaps the best place to start is to consider how a third variable can change our understanding of the relationship between two variables. 
 
+In this appendix we offer two simple examples where ``other factors" may arise where appropriate analyses can be undertaken through stratification. Such an approach requires no advanced methods, nor even any inference (though some instructors may incorporate other related concepts and approaches). These examples can help to introduce students to these concepts\marginnote{The \emph{Journal of Statistics Education} Datasets and Stories department features a number of interesting examples.}.
 
-The new ASA guidelines for undergraduate programs in statistics state that
-students need a clear understanding of principles of statistical design
-and tools to assess and account for the possible impact of
-other
-measured and unmeasured variables \cite{asa:2014}.
-This can't all happen in a single statistics course, but it is important that students are exposed to the basic principles
-early and often.
+What is especially concerning in a first (and often only) statistics course is that the simple examples we use to introduce statistics concepts can give students the false impression that all data come from well-conducted randomized trials with no dropout, full adherence, and sufficient blinding and that regression models always include all the appropriate predictors. We hope that introductory statistics courses can open students’ eyes to the complexity of real data and the need to take that complexity into account.
 
-The long laundry-list of possible topics for the first course along with expectations from client disciplines make it challenging to bring multivariate thinking into the mix.
-What can we teach students in the first course?  
-
-In this appendix we consider two simple examples where ``other factors" may arise where appropriate analyses can be undertaken through stratification.  Such an approach requires no inferential methods or advanced methods (though some instructors may incorporate other related concepts and approaches). 
 
 \section{\textbf{Smoking in Whickham}}
 
@@ -111,8 +93,10 @@ probabilities as a function of area.
 \begin{figure}[tbhp]
 <<whick1,warning=FALSE, fig.height=3.8,message=FALSE,echo=FALSE>>=
 require(gmodels); require(mosaic)
-mosaicplot(tally(~ outcome + smoker, data=Whickham), ylab="smoking status", 
-  xlab="Outcome (after 10 years)", main="")
+Whickham <- mutate(Whickham,
+                   agegrp = cut(age, breaks=c(1, 44, 64, 100), labels=c("18-44", "45-64", "65+")))
+mosaicplot(tally(~ outcome + smoker, data=Whickham), ylab="Smoking status", 
+  xlab="Mortality status (after 10 years)", main="")
 # with(Whickham, CrossTable(smoker, outcome, prop.c=FALSE, prop.chisq=FALSE, prop.t=FALSE))
 @
 \caption{Mosaicplot representing the association between smoking status and mortality in the Whickham
@@ -120,34 +104,33 @@ study}
 \label{fig:whick1}
 \end{figure}
 
-The area for the smokers who are still alive is larger than we would expect if there were no 
+We note that the majority of subjects have survived, but that
+the area for the smokers who are still alive is larger than we would expect if there were no 
 association between these variables.
 What could explain this result?
 
 Let's consider stratification by age of the participants.  Table \ref{tab:whick2} and Figure \ref{fig:whick2} displays the relationship
-between smoking and mortality over a 10--year period for those age 18--44 at baseline.
+between smoking and mortality over a 10--year period for those age 18--44, those 45-64, and subjects that were 65 or older at baseline.
 \begin{table}[!ht]
 \begin{center}
-\begin{tabular}{|l|l|l|}
+\begin{tabular}{|l|l|l|l|}
 \hline
-SMOKER & Alive & Dead \\ \hline
-No & 327 (96.5\%) & 12 (3.5\%) \\ \hline
-Yes & 270 (94.7\%) & 15 (5.3\%) \\ \hline
+Baseline age & SMOKER & Alive & Dead \\ \hline \hline
+18-44 & No & 327 (96.5\%) & 12 (3.5\%) \\  \hline
+18-44 & Yes & 270 (94.7\%) & 15 (5.3\%) \\ \hline \hline
+45-64 & No & 147 (73.5\%) & 53 (26.5\%) \\ \hline
+45-64 & Yes & 167 (67.6\%) & 80 (32.4\%) \\ \hline \hline
+65+ & No & 28 (14.5\%) & 165 (85.5\%) \\ \hline
+65+ & Yes & 6 (12.0\%) & 44 (88.0\%) \\ \hline 
 \end{tabular}
-\caption{Distribution of smoking status and mortality status (after 10 years) for 18--44 year olds (at baseline) from the Whickham study}
+\caption{Distribution of smoking status and mortality status (after 10 years) stratified by age (at baseline) from the Whickham study}
 \label{tab:whick2}
 \end{center}
 \end{table}
 
-\begin{figure}[tbhp]
-<<whick2p,warning=FALSE, fig.height=3.8,message=FALSE,echo=FALSE>>=
-Whickham <- mutate(Whickham, 
-  agegrp = cut(age, breaks=c(1, 44, 64, 100), labels=c("18-44", "45-64", "65+")))
-mosaicplot(tally(~ smoker + outcome, data=filter(Whickham, agegrp=="18-44")), ylab="mortality status (after 10 years)",
-  xlab="Age group", main="")
-# with(Whickham, CrossTable(smoker, outcome, prop.c=FALSE, prop.chisq=FALSE, prop.t=FALSE))
-@
-\caption{Mosaicplot representing the association between mortality and smoking status for 18--44 year olds in the Whickham study}
+\begin{figure}[h]
+\includegraphics{includes/Whickham.pdf}
+\caption{Mosaicplot representing the association between mortality and smoking status (stratified by baseline age) in the Whickham study}
 \label{fig:whick2}
 \end{figure}
 
@@ -156,100 +139,87 @@ require(gmodels); require(mosaic)
 #with(filter(Whickham, agegrp=="18-44"), CrossTable(smoker, outcome, prop.c=FALSE, prop.chisq=FALSE, prop.t=FALSE))
 @
 
-We see that mortality rates are low for this age group, but higher for smokers than non-smokers (5.3\% for smokers vs 3.5\% for non-smokers).  For this example, since the baserate for mortality is so low, the
-information value of the mosaicplot is low.
+We see that mortality rates are low for the youngest group, but the mortality rate is slightly higher for smokers than non-smokers (5.3\% for smokers vs 3.5\% for non-smokers).  (Given such low baserates, the information value of the first of the three stratified mosaicplots is low.)
 
 Similar results are seen 
-in Table \ref{tab:whick3} and Figure \ref{fig:whick3}
 for subjects who are between 45--64 years old at baseline: smokers have a higher
 probability of mortality than non-smokers.
-\begin{table}[!ht]
-\begin{center}
-\begin{tabular}{|l|l|l|}
-\hline
-SMOKER & Alive & Dead \\ \hline
-No & 147 (73.5\%) & 53 (26.5\%) \\ \hline
-Yes & 167 (67.6\%) & 80 (32.4\%) \\ \hline
-\end{tabular}
-\caption{Distribution of smoking status and mortality status (after 10 years) for 45--64 year olds (at baseline) from the Whickham study}
-\label{tab:whick3}
-\end{center}
-\end{table}
-
-\begin{figure}[tbhp]
-<<whick3p,warning=FALSE, fig.height=3.8,message=FALSE,echo=FALSE>>=
-mosaicplot(tally(~ smoker + outcome, data=filter(Whickham, agegrp=="45-64")), ylab="mortality status (after 10 years)",
-  xlab="Age group", main="")
-# with(Whickham, CrossTable(smoker, outcome, prop.c=FALSE, prop.chisq=FALSE, prop.t=FALSE))
-@
-\caption{Mosaicplot representing the association between mortality and smoking status for 45--64 year olds in the Whickham study}
-\label{fig:whick3}
-\end{figure}
-
-Finally, 
-Table \ref{tab:whick4} and Figure \ref{fig:whick4} display the results for subjects who were
-65 or older at baseline.
-We observe that almost all of these individuals died during the followup period, but the 
-probability of dying was higher for smokers than non-smokers.
+\marginnote{Smoking is ``bad" within each of the subgroups of age, while Smoking is ``good" overall.}
+Almost all of these individuals died who were 65 or older baseline died during the followup period, but the 
+probability of dying was also slightly higher for smokers than non-smokers.
 
 This example represents a classic example of \emph{Simpson's paradox}\cite{simp:1951}, where 
 overall smoking is ``protective", but within each age group smokers have a higher probability
 of dying than non-smokers.
 
-\begin{table}[htpb]
-\begin{center}
-\begin{tabular}{|l|l|l|}
-\hline
-SMOKER & Alive & Dead \\ \hline
-No & 28 (14.5\%) & 165 (85.5\%) \\ \hline
-Yes & 6 (12.0\%) & 44 (88.0\%) \\ \hline
-\end{tabular}
-\caption{Distribution of smoking status and mortality status (after 10 years) for those 65 and older
-(at baseline) from the Whickham study}
-\label{tab:whick4}
-\end{center}
-\end{table}
-
-\begin{figure}[tbhp]
-<<whick4p,warning=FALSE, fig.height=3.8,message=FALSE,echo=FALSE>>=
-mosaicplot(tally(~ smoker + outcome, data=filter(Whickham, agegrp=="65+")), ylab="mortality status (after 10 years)",
-  xlab="Age group", main="")
-@
-\caption{Mosaicplot representing the association between mortality and smoking status for those 65 years olds or older at baseline in the Whickham study}
-\label{fig:whick4}
-\end{figure}
 
 
-<<whick3,warning=FALSE, message=FALSE,echo=FALSE>>=
-require(gmodels); require(mosaic)
-#with(filter(Whickham, agegrp=="45-64"), CrossTable(smoker, outcome, prop.c=FALSE, prop.chisq=FALSE, prop.t=FALSE))
-@
+How can this be happening?  Figure \ref{fig:whickage1} and Table \ref{tab:whickage1} can help
+us to disentangle these relationships.  Clearly there is an association between 
+age and the probability of dying over a ten year period.
 
 \begin{figure}[tbhp]
 <<whickage1,warning=FALSE, fig.height=3.8,message=FALSE,echo=FALSE>>=
 mosaicplot(tally(~ agegrp + outcome, data=Whickham), ylab="mortality status (after 10 years)", 
   xlab="Age group", main="")
-# with(Whickham, CrossTable(smoker, outcome, prop.c=FALSE, prop.chisq=FALSE, prop.t=FALSE))
+#with(Whickham, CrossTable(agegrp, smoker, prop.c=FALSE, prop.chisq=FALSE, prop.t=FALSE))
 @
 \caption{Mosaicplot representing the association between mortality and age in the Whickham
 study}
 \label{fig:whickage1}
 \end{figure}
 
+
+\begin{table}[htpb]
+\begin{center}
+\begin{tabular}{|l|l|l|}
+\hline
+Age group & Alive & Dead \\ \hline
+18-44 & 597 (95.7\%) & 27 (4.3\%) \\ \hline
+45-64 & 314 (70.2\%) & 133 (29.8\%) \\ \hline
+65+ & 34 (14.0\%) & 209 (86.0\%) \\ \hline
+\end{tabular}
+\caption{Distribution of age group and mortality status (after 10 years) 
+from the Whickham study}
+\label{tab:whickage1}\end{center}
+\end{table}
+
+Not surprisingly, we see that
+mortality rates are highest for the oldest subjects.
+
+We also observed that 
+there is an association between age group and smoking status, as displayed in 
+Figure \ref{fig:whickage2} and Table \ref{tab:whickage2}.
+
 \begin{figure}[tbhp]
 <<whickage2,warning=FALSE, fig.height=3.8,message=FALSE,echo=FALSE>>=
 mosaicplot(tally(~ agegrp + smoker, data=Whickham), ylab="smoking status", 
   xlab="Age group", main="")
-# with(Whickham, CrossTable(smoker, outcome, prop.c=FALSE, prop.chisq=FALSE, prop.t=FALSE))
 @
 \caption{Mosaicplot representing the association between smoking status and age in the Whickham
 study}
 \label{fig:whickage2}
 \end{figure}
 
-How can this be happening?
+\begin{table}[htpb]
+\begin{center}
+\begin{tabular}{|l|l|l|}
+\hline
+Age group & Non-smoker & Smoker \\ \hline
+18-44 & 339 (54.3\%) & 285 (45.7\%) \\ \hline
+45-64 & 200 (44.7\%) & 247 (55.3\%) \\ \hline
+65+ & 193 (79.4\%) & 50 (20.6\%) \\ \hline
+\end{tabular}
+\caption{Distribution of age group and smoking status (at baseline) 
+from the Whickham study}
+\label{tab:whickage2}\end{center}
+\end{table}
 
-We note that mortality rates are highest for the oldest subjects (see Figure \ref{fig:whickage1}) but smoking is also associated with age (see Figure \ref{fig:whickage2}).  After controlling for age, smokers have a higher
+Smoking is also associated with age, with those between
+the ages of 45 to 64 most likely to have been smokers at baseline.  
+
+
+After controlling for age, smokers have a higher
 rate of mortality than non-smokers in this study.
 <<whick4,warning=FALSE, message=FALSE,echo=FALSE>>=
 #with(filter(Whickham, agegrp=="65+"), CrossTable(smoker, outcome, prop.c=FALSE, prop.chisq=FALSE, prop.t=FALSE))
@@ -292,7 +262,7 @@ xyplot(sat ~ salary, type=c("r", "p"),
 \end{figure}
 
 
-But the real story is hidden behind one of the ``other factors" that we warn students about but don't generally teach how to address!  The proportion of students taking the SAT varies dramatically by region, as do teacher salaries.
+But the real story is hidden behind one of the ``other factors" that we warn students about but don't generally teach how to address!  The proportion of students taking the SAT varies dramatically between states, as do teacher salaries.
 In the midwest and plains states, where teacher salaries tend to be lower, relatively few high school students take the SAT exam.  
 These are
 typically the top students who are planning to attend college out of state, while many others take the
