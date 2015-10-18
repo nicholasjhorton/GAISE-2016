@@ -61,7 +61,7 @@ Perhaps the best place to start is to consider how a third variable can change o
 
 In this appendix we offer two simple examples where ``other factors" may arise where appropriate analyses can be undertaken through stratification. Such an approach requires no advanced methods, nor even any inference (though some instructors may incorporate other related concepts and approaches). These examples can help to introduce students to these concepts\marginnote{The \emph{Journal of Statistics Education} Datasets and Stories department features a number of interesting examples.}.
 
-What is especially concerning in a first (and often only) statistics course is that the simple examples we use to introduce statistics concepts can give students the false impression that all data come from well-conducted randomized trials with no dropout, full adherence, and sufficient blinding and that regression models always include all the appropriate predictors. We hope that introductory statistics courses can open students’ eyes to the complexity of real data and the need to take that complexity into account.
+What is especially concerning in a first (and often only) statistics course is that the simple examples we use to introduce statistics concepts can give students the false impression that all data come from well-conducted randomized trials with no dropout, full adherence, and sufficient blinding and that regression models always include all the appropriate predictors. We hope that introductory statistics courses can open students' eyes to the complexity of real data and the need to take that complexity into account.
 
 
 \section{\textbf{Smoking in Whickham}}
@@ -154,9 +154,8 @@ of dying than non-smokers.
 
 
 
-How can this be happening?  Figure \ref{fig:whickage1} and Table \ref{tab:whickage1} can help
-us to disentangle these relationships.  Clearly there is an association between 
-age and the probability of dying over a ten year period.
+How can this be happening?  Figure \ref{fig:whickage1} and Table \ref{tab:whickage1} help
+us to disentangle these relationships.  
 
 \begin{figure}[tbhp]
 <<whickage1,warning=FALSE, fig.height=3.8,message=FALSE,echo=FALSE>>=
@@ -187,7 +186,7 @@ from the Whickham study}
 Not surprisingly, we see that
 mortality rates are highest for the oldest subjects.
 
-We also observed that 
+We also observe that 
 there is an association between age group and smoking status, as displayed in 
 Figure \ref{fig:whickage2} and Table \ref{tab:whickage2}.
 
@@ -234,10 +233,10 @@ potential other factors.
 
 
 
-\section{\textbf{SAT scores and Teacher Salaries}}
+\section{\textbf{SAT scores and teacher salaries}}
 
 Consider an example where statewide data from the mid-1990's are used to assess the association between average teacher salary in the state and average SAT (Scholastic Aptitude Test) scores for students 
-\cite{gube:1999} \cite{hort:2015}.  These exams are sometimes used as a proxy for educational quality.  The leftmost
+\cite{gube:1999} \cite{hort:2015}.  These high stakes high school exams are sometimes used as a proxy for educational quality.  The leftmost
 graph in Figure \ref{fig:sat} displays the unconditional association between these variables.  There is a statistically significant negative relationship. The model predicts that a state with an average salary that is one thousand dollars
 higher than another would have SAT scores that are on average 5.54 points lower.
 
@@ -300,9 +299,6 @@ xyplot(sat ~ salary, type=c("r", "p"), groups=fracgrp, auto.key=TRUE,
 \end{center}
 \end{figure}
 
-Further light is shed after viewing a matrix of scatterplots (see Figure \ref{fig:splom}): we see that
-the fraction of students taking the SAT is negatively associated with the average statewide SAT scores and positively associated with statewide teacher salary.
-
 \begin{figure}[tbhp]
 <<message=FALSE,echo=FALSE,fig.height=4>>=
 require(GGally)
@@ -311,6 +307,10 @@ ggpairs(select(SAT, sat, frac, salary))
 \caption{Matrix of scatterplots for the state-level SAT data}
 \label{fig:splom}
 \end{figure}
+
+Further light is shed via a matrix of scatterplots (see Figure \ref{fig:splom}): we see that
+the fraction of students taking the SAT is negatively associated with the average statewide SAT scores and positively associated with statewide teacher salary.
+
 
 \marginnote{Another natural approach to understanding of confounding and multivariate thinking is multiple regression.
 While this is not a traditional topic included in introductory statistics, an increasing number of textbooks
