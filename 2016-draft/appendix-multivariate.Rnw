@@ -53,15 +53,17 @@
 
 \section{\textbf{Introduction}}
 
-The new ASA guidelines for undergraduate programs in statistics recommend that students obtain a clear understanding of principles of statistical design and tools to assess and account for the possible impact of other measured and unmeasured variables\cite{asa:2014}. 
+The new ASA guidelines for undergraduate programs in statistics recommend that students obtain a clear understanding of principles of statistical design and tools to assess and account for the possible impact of other measured and unmeasured confounding variables\cite{asa:2014}. 
 \marginnote{See also Wild's ``On locating statistics in the world of finding out", \url{http://arxiv.org/abs/1507.05982.}}%
-An introductory statistics course can't cover these topics in depth, but it is important to expose students to them even in their first course\cite{meng:2011}.
+An introductory statistics course cannot cover these topics in depth, but it is important to expose students to them even in their first course\cite{meng:2011}.
 
 Perhaps the best place to start is to consider how a third variable can change our understanding of the relationship between two variables. 
 
-In this appendix we offer two simple examples where ``other factors" may arise where appropriate analyses can be undertaken through stratification. Such an approach requires no advanced methods, nor even any inference (though some instructors may incorporate other related concepts and approaches). These examples can help to introduce students to these concepts\marginnote{The \emph{Journal of Statistics Education} Datasets and Stories department features a number of interesting examples.}.
+In this appendix we offer two simple examples where ``other factors" may arise where appropriate analyses can be undertaken through stratification. Such an approach requires no advanced methods, nor even any inference (though some instructors may incorporate other related concepts and approaches). These examples can help to introduce students to these concepts\marginnote{The \emph{Journal of Statistics Education} Datasets and Stories department features a number of interesting multivariable examples that feature confounding.}.
 
 What is especially concerning in a first (and often only) statistics course is that the simple examples we use to introduce statistics concepts can give students the false impression that all data come from well-conducted randomized trials with no dropout, full adherence, and sufficient blinding and that regression models always include all the appropriate predictors. We hope that introductory statistics courses can open students' eyes to the complexity of real data and the need to take that complexity into account.
+
+Including one or more multivariable examples early in an introductory statistics course may help to prepare students to deal with more than one or two variables at a time.
 
 
 \section{\textbf{Smoking in Whickham}}
@@ -79,13 +81,13 @@ SMOKER & Alive & Dead \\ \hline
 No & 502 (68.6\%) & 230 (31.4\%) \\ \hline
 Yes & 443 (76.1\%) & 139 (23.9\%) \\ \hline
 \end{tabular}
-\caption{Distribution of smoking status and mortality status (after 10 years) from the Whickham study}
+\caption{Distribution of smoking status and mortality status (after ten years) from the Whickham study}
 \label{tab:whick1}
 \end{center}
 \end{table}
 
 We see that the risk of dying is lower for smokers than for non-smokers, since 
-31.4\% of the non-smokers died, but only 23.9\% of the smokers.  
+31.4\% of the non-smokers died, but only 23.9\% of the smokers did not survive over the ten year period.  
 
 A graphical representation using a mosaicplot (also known as an \emph{Eikosogram}) represents the cell 
 probabilities as a function of area.  
@@ -96,7 +98,7 @@ require(gmodels); require(mosaic)
 Whickham <- mutate(Whickham,
                    agegrp = cut(age, breaks=c(1, 44, 64, 100), labels=c("18-44", "45-64", "65+")))
 mosaicplot(tally(~ outcome + smoker, data=Whickham), ylab="Smoking status", 
-  xlab="Mortality status (after 10 years)", main="")
+  xlab="Mortality status (after 10 years)", main="", color=TRUE)
 # with(Whickham, CrossTable(smoker, outcome, prop.c=FALSE, prop.chisq=FALSE, prop.t=FALSE))
 @
 \caption{Mosaicplot representing the association between smoking status and mortality in the Whickham
@@ -144,12 +146,12 @@ We see that mortality rates are low for the youngest group, but the mortality ra
 Similar results are seen 
 for subjects who are between 45--64 years old at baseline: smokers have a higher
 probability of mortality than non-smokers.
-\marginnote{Smoking is ``bad" within each of the subgroups of age, while Smoking is ``good" overall.}
-Almost all of these individuals died who were 65 or older baseline died during the followup period, but the 
+\marginnote{Smoking is ``bad" within each of the subgroups of age, while smoking is ``good" overall.}
+Almost all of the participants who were 65 or older at baseline died during the followup period, but the 
 probability of dying was also slightly higher for smokers than non-smokers.
 
 This example represents a classic example of \emph{Simpson's paradox}\cite{simp:1951}, where 
-overall smoking is ``protective", but within each age group smokers have a higher probability
+overall smoking appears to be ``protective", but within each age group smokers have a higher probability
 of dying than non-smokers.
 
 
@@ -160,7 +162,7 @@ us to disentangle these relationships.
 \begin{figure}[tbhp]
 <<whickage1,warning=FALSE, fig.height=3.8,message=FALSE,echo=FALSE>>=
 mosaicplot(tally(~ agegrp + outcome, data=Whickham), ylab="mortality status (after 10 years)", 
-  xlab="Age group", main="")
+  xlab="Age group", main="", color=TRUE)
 #with(Whickham, CrossTable(agegrp, smoker, prop.c=FALSE, prop.chisq=FALSE, prop.t=FALSE))
 @
 \caption{Mosaicplot representing the association between mortality and age in the Whickham
@@ -193,7 +195,7 @@ Figure \ref{fig:whickage2} and Table \ref{tab:whickage2}.
 \begin{figure}[tbhp]
 <<whickage2,warning=FALSE, fig.height=3.8,message=FALSE,echo=FALSE>>=
 mosaicplot(tally(~ agegrp + smoker, data=Whickham), ylab="smoking status", 
-  xlab="Age group", main="")
+  xlab="Age group", main="", color=TRUE)
 @
 \caption{Mosaicplot representing the association between smoking status and age in the Whickham
 study}
@@ -225,9 +227,9 @@ rate of mortality than non-smokers in this study.
 @
 
 
-Simple methods such as stratification can allow students to peer beyond two dimensions
-and control for the effects of a confounding factor and avoid ``paralysis" when dealing with
-potential other factors.
+Simple methods such as stratification can allow students to think beyond two 
+dimensions and reveal effects of confounding variables.  Introducing this
+thought process early on helps students easily transition to analyses involving multiple explanatory variables.
 
 
 
@@ -236,8 +238,8 @@ potential other factors.
 \section{\textbf{SAT scores and teacher salaries}}
 
 Consider an example where statewide data from the mid-1990's are used to assess the association between average teacher salary in the state and average SAT (Scholastic Aptitude Test) scores for students 
-\cite{gube:1999} \cite{hort:2015}.  These high stakes high school exams are sometimes used as a proxy for educational quality.  The leftmost
-graph in Figure \ref{fig:sat} displays the unconditional association between these variables.  There is a statistically significant negative relationship. The model predicts that a state with an average salary that is one thousand dollars
+\cite{gube:1999} \cite{hort:2015}.  These high stakes high school exams are sometimes used as a proxy for educational quality.  
+Figure \ref{fig:sat} displays the (unconditional) association between these variables.  There is a statistically significant negative relationship ($\hat{\beta_1}$=-5.54 points, $p=0.001$). The model predicts that a state with an average salary that is one thousand dollars
 higher than another would have SAT scores that are on average 5.54 points lower.
 
 \begin{figure}[tbhp]
@@ -255,17 +257,17 @@ xyplot(sat ~ salary, type=c("r", "p"),
                xlab="Average teacher salary (in thousands of $)",
                ylab="State average SAT score", data=SAT)
 @
-\caption{Unconditional association of state average teacher salary with average SAT score}
+\caption{Association of state average teacher salary with average SAT score}
 \label{fig:sat}
 \end{center}
 \end{figure}
 
 
-But the real story is hidden behind one of the ``other factors" that we warn students about but don't generally teach how to address!  The proportion of students taking the SAT varies dramatically between states, as do teacher salaries.
+But the real story is hidden behind one of the ``other factors" that we warn students about but do not generally teach how to address!  The proportion of students taking the SAT varies dramatically between states, as do teacher salaries.
 In the midwest and plains states, where teacher salaries tend to be lower, relatively few high school students take the SAT exam.  
 These are
 typically the top students who are planning to attend college out of state, while many others take the
-alternative standardized ACT test.  For each of the three groups of states, the association is 
+alternative standardized ACT test.  For each of the three groups of states defined by the fraction taking the SAT, the association is 
 non-negative.  The net result is that the fraction
 taking the SAT is a confounding factor.  
 
@@ -274,7 +276,7 @@ Statistical thinking with an appreciation of Simpson's paradox would alert a stu
 To tackle this problem, students need to know that multivariable modeling exists (but not all aspects
 of how it can be utilized).
 
-Within an introductory statistics course, the use of stratification by a potential confounder
+Within an introductory statistics course, the use of stratification by a potential confounder is easy to implement.
 By splitting
 states up into groups based on the fraction of
 students taking the SAT it is possible to account for this confounder and use 
@@ -317,9 +319,22 @@ While this is not a traditional topic included in introductory statistics, an in
 and courses are incorporating the basic principles (often purely as a descriptive summarization of the data).
 In a multiple regression model that controls for the fraction of students taking the SAT variable, the
 sign of the slope parameter for teacher salary flips from negative to positive.}  
-This type of multivariable thinking is critical to make sense of the observational data around us.  If students
-don't see some tools for disentangling complex relationships, they may dismiss statistics as an old-school
-discipline only suitable for small sample inference of randomized studies.
 
+It's important to have students look for possible confounding factors when the relationship isn't what they expect, but it is also important when the relationship is what is expected.  It's not always possible to stratify by factors (particularly if important confounders are not collected).  
+
+Multivariable thinking is critical to make sense of the observational data around 
+us.  
+This type of thinking might be introduced in stages:
+\begin{enumerate}
+\item learn to identify observational studies,
+\item explain why randomized assignment to treatment improves the situation,
+\item learn to be wary of cause-and-effect conclusions from observational studies,
+\item learn to consider potential confounding factors and explain why they might be confounding factors,
+\item use simple approaches (such as stratification) to address confounding
+\end{enumerate}
+
+If students
+do not have exposure to simple tools for disentangling complex relationships, they may dismiss statistics as an old-school
+discipline only suitable for small sample inference of randomized studies.
 
 
