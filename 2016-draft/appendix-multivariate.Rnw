@@ -150,7 +150,7 @@ probability of mortality than non-smokers.
 Almost all of the participants who were 65 or older at baseline died during the followup period, but the 
 probability of dying was also slightly higher for smokers than non-smokers.
 
-This example represents a classic example of \emph{Simpson's paradox}\cite{simp:1951}, where 
+This example represents a classic example of \emph{Simpson's paradox}\cite{simp:1951,nort:divi:2015}, where 
 overall smoking appears to be ``protective", but within each age group smokers have a higher probability
 of dying than non-smokers.
 
