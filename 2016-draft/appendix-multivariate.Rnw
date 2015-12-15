@@ -314,10 +314,7 @@ Further light is shed via a matrix of scatterplots (see Figure \ref{fig:splom}):
 the fraction of students taking the SAT is negatively associated with the average statewide SAT scores and positively associated with statewide teacher salary.
 
 
-\marginnote{Another natural approach to understanding of confounding and multivariate thinking is multiple regression.
-While this is not a traditional topic included in introductory statistics, an increasing number of textbooks
-and courses are incorporating the basic principles (often purely as a descriptive summarization of the data).
-In a multiple regression model that controls for the fraction of students taking the SAT variable, the
+\marginnote{In a multiple regression model that controls for the fraction of students taking the SAT variable, the
 sign of the slope parameter for teacher salary flips from negative to positive.}  
 
 It's important to have students look for possible confounding factors when the relationship isn't what they expect, but it is also important when the relationship is what is expected.  It's not always possible to stratify by factors (particularly if important confounders are not collected).  
@@ -337,4 +334,42 @@ If students
 do not have exposure to simple tools for disentangling complex relationships, they may dismiss statistics as an old-school
 discipline only suitable for small sample inference of randomized studies.
 
+
+Multivariable models are necessary when we want to model many aspects of the world more realistically. The real world is complex and can't be described well by one or two variables. Simple examples are valuable for introducing concepts, but when we don't show students realistic models they are left with the impression that statistics is trivial and not really useful. This report recommends that students be introduced to multivariable thinking---preferably early in the introductory course and not as an afterthought at the end of the course.
+
+The most common multivariable model is a multiple regression. Regression can be introduced as soon as students have seen scatterplots and thought about the patterns we look for in them. When students have access to a statistics program on a computer, they can find regression analyses for themselves. But even without computer access, they can learn about typical regression output tables.
+The point is to show students a model involving three (or more) variables and discuss some of the subtleties of such models. Here is one example:
+
+Scottish hill races are scheduled throughout the year and throughout the country of Scotland (\url{http://www.scottishhillracing.co.uk}). The official site gives the current records (in seconds) for men and women in these races along with facts about each race including the distance covered (in km) and the total amount of hill climbing (in meters). Naturally, both the distance and the climb affect the record times. So a simple regression to predict time from either one would miss an important aspect of the races.
+
+For example, the simple regression of time vs climb for women’s records looks like this:
+\begin{verbatim}
+Response variable is:	Womens Record
+R squared = 85.2%     R squared (adjusted) = 84.9%
+s = 1126  with  70-2 = 68  degrees of freedom 
+
+Variable        Coefficient     SE(Coeff)     t-ratio    P-value
+Intercept       320.528	        222.2          1.44        0.1537
+Climb	          1.75493         0.088       19.8       < 0.0001
+\end{verbatim}
+
+From which we see that the time is greater, on average, by 1.75 seconds per meter of climb. The $R^2$ value of 85.2\% assures us that the fit of the model is good with 85.2\% of the variance in women’s records accounted for by a regression on the climb.
+
+But surely that isn't all there is to these races. Longer races should take more time to run. And although an $R^2$ of 85.2\% is good, it does leave almost 15\% of the variance unaccounted for. 
+
+Multiple regression models work the same way as simple regression models, but include two or more predictors. Most statistics programs fit multiple regressions in the same way as simple ones; you just need to find the way your program wants you to specify more than one predictor.
+
+Here is the regression with both Climb and Distance as predictors:
+
+\begin{verbatim}
+Response variable is:	Womens Record
+R squared = 97.5%     R squared (adjusted) = 97.4%
+s = 468.0  with  70 - 3 = 67  degrees of freedom 
+Variable      Coefficient    SE(Coeff)     t-ratio   P-value
+Intercept     -497.656       102.8         -4.84     < 0.0001
+Distance       387.628        21.45         18.1     < 0.0001
+Climb            0.852282      0.0621       13.7     < 0.0001
+\end{verbatim}
+
+This regression model shows both the distance and the climb as predictors and has an $R^2$ of 97.5\%--a substantial improvement. More interesting, the coefficient of Climb has changed from 1.75 to 0.85. That's because in a multiple regression, we interpret each coefficient as the effect of its variable on y after allowing for the effects of the other predictors.
 
