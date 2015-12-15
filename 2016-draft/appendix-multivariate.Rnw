@@ -59,7 +59,7 @@ An introductory statistics course cannot cover these topics in depth, but it is 
 
 Perhaps the best place to start is to consider how a third variable can change our understanding of the relationship between two variables. 
 
-In this appendix we offer two simple examples where ``other factors" may arise where appropriate analyses can be undertaken through stratification. Such an approach requires no advanced methods, nor even any inference (though some instructors may incorporate other related concepts and approaches). These examples can help to introduce students to these concepts\marginnote{The \emph{Journal of Statistics Education} Datasets and Stories department features a number of interesting multivariable examples that feature confounding.}.
+In this appendix we describe simple examples where a third factor clouds the association between two other variables.  Simple approaches (such as stratification) can help to discern the true associations. Stratification requires no advanced methods, nor even any inference (though some instructors may incorporate other related concepts and approaches such as multiple regression). These examples can help to introduce students to techniques for assessing relationships between more than two variables\marginnote{The \emph{Journal of Statistics Education} Datasets and Stories department features a number of interesting multivariable examples that feature confounding.}.
 
 What is especially concerning in a first (and often only) statistics course is that the simple examples we use to introduce statistics concepts can give students the false impression that all data come from well-conducted randomized trials with no dropout, full adherence, and sufficient blinding and that regression models always include all the appropriate predictors. We hope that introductory statistics courses can open students' eyes to the complexity of real data and the need to take that complexity into account.
 
@@ -92,8 +92,8 @@ We see that the risk of dying is lower for smokers than for non-smokers, since
 A graphical representation using a mosaicplot (also known as an \emph{Eikosogram}) represents the cell 
 probabilities as a function of area.  
 
-\begin{figure}[tbhp]
-<<whick1,warning=FALSE, fig.height=3.8,message=FALSE,echo=FALSE>>=
+\begin{figure}[bh]
+<<whick1,warning=FALSE, fig.height=4.8,message=FALSE,echo=FALSE>>=
 require(gmodels); require(mosaic)
 Whickham <- mutate(Whickham,
                    agegrp = cut(age, breaks=c(1, 44, 64, 100), labels=c("18-44", "45-64", "65+")))
@@ -130,8 +130,8 @@ Baseline age & SMOKER & Alive & Dead \\ \hline \hline
 \end{center}
 \end{table}
 
-\begin{figure}[h]
-\includegraphics{includes/Whickham.pdf}
+\begin{figure}[bhp]
+\includegraphics[width=5.0in]{includes/Whickham.pdf}
 \caption{Mosaicplot representing the association between mortality and smoking status (stratified by baseline age) in the Whickham study}
 \label{fig:whick2}
 \end{figure}
@@ -159,8 +159,8 @@ of dying than non-smokers.
 How can this be happening?  Figure \ref{fig:whickage1} and Table \ref{tab:whickage1} help
 us to disentangle these relationships.  
 
-\begin{figure}[tbhp]
-<<whickage1,warning=FALSE, fig.height=3.8,message=FALSE,echo=FALSE>>=
+\begin{figure}[bh]
+<<whickage1,warning=FALSE, fig.height=4.8,message=FALSE,echo=FALSE>>=
 mosaicplot(tally(~ agegrp + outcome, data=Whickham), ylab="mortality status (after 10 years)", 
   xlab="Age group", main="", color=TRUE)
 #with(Whickham, CrossTable(agegrp, smoker, prop.c=FALSE, prop.chisq=FALSE, prop.t=FALSE))
@@ -192,7 +192,7 @@ We also observe that
 there is an association between age group and smoking status, as displayed in 
 Figure \ref{fig:whickage2} and Table \ref{tab:whickage2}.
 
-\begin{figure}[tbhp]
+\begin{figure}[bh]
 <<whickage2,warning=FALSE, fig.height=3.8,message=FALSE,echo=FALSE>>=
 mosaicplot(tally(~ agegrp + smoker, data=Whickham), ylab="smoking status", 
   xlab="Age group", main="", color=TRUE)
@@ -242,7 +242,7 @@ Consider an example where statewide data from the mid-1990's are used to assess 
 Figure \ref{fig:sat} displays the (unconditional) association between these variables.  There is a statistically significant negative relationship ($\hat{\beta_1}$=-5.54 points, $p=0.001$). The model predicts that a state with an average salary that is one thousand dollars
 higher than another would have SAT scores that are on average 5.54 points lower.
 
-\begin{figure}[tbhp]
+\begin{figure}[bh]
 \begin{center}
 <<sat1,fig.height=3.5,fig.width=5.8,message=FALSE,echo=FALSE,warning=FALSE>>=
 require(mosaic); require(mosaicData)
@@ -291,20 +291,20 @@ and SAT score for each of these groups, but when we average over them, we observ
 
 \begin{figure}[tpbh]
 \begin{center}
-<<sat2,fig.height=3.8,fig.width=5.8,echo=FALSE,message=FALSE,warning=FALSE>>=
+<<sat2,fig.height=5.2,fig.width=6.7,echo=FALSE,message=FALSE,warning=FALSE>>=
 xyplot(sat ~ salary, type=c("r", "p"), groups=fracgrp, auto.key=TRUE, 
        xlab="Average teacher salary (in thousands of $)", 
        ylab="State average SAT score", data=SAT)
 @
-\caption{Association after accounting for the fraction of students taking the SAT in that state}
+\caption{Association between teacher salary and SAT score after accounting for the fraction of students taking the SAT in that state}
 \label{fig:sat2}
 \end{center}
 \end{figure}
 
 \begin{figure}[tbhp]
-<<message=FALSE,echo=FALSE,fig.height=4>>=
+<<message=FALSE,echo=FALSE,fig.height=5.1>>=
 require(GGally)
-ggpairs(select(SAT, sat, frac, salary))
+ggpairs(select(SAT, salary, sat, frac))
 @
 \caption{Matrix of scatterplots for the state-level SAT data}
 \label{fig:splom}
@@ -318,6 +318,47 @@ the fraction of students taking the SAT is negatively associated with the averag
 sign of the slope parameter for teacher salary flips from negative to positive.}  
 
 It's important to have students look for possible confounding factors when the relationship isn't what they expect, but it is also important when the relationship is what is expected.  It's not always possible to stratify by factors (particularly if important confounders are not collected).  
+
+\section{\textbf{Multiple regression}}
+
+The most common multivariable model is a multiple regression. Regression can be introduced as soon as students have seen scatterplots and thought about the patterns we look for in them. When students have access to a statistics program on a computer, they can find regression analyses for themselves. But even without computer access, they can learn about typical regression output tables.
+The point is to show students a model involving three (or more) variables and discuss some of the subtleties of such models. Here is one example:
+
+Scottish hill races are scheduled throughout the year and throughout the country of Scotland (\url{http://www.scottishhillracing.co.uk}). The official site gives the current records (in seconds) for men and women in these races along with facts about each race including the distance covered (in km) and the total amount of hill climbing (in meters). Naturally, both the distance and the climb affect the record times. So a simple regression to predict time from either one would miss an important aspect of the races.
+
+For example, the simple regression of time versus climb for women's records looks like this:
+\begin{verbatim}
+Response variable is:	Women's Record
+R squared = 85.2%     R squared (adjusted) = 84.9%
+s = 1126  with  70-2 = 68  degrees of freedom 
+
+Variable        Coefficient     SE(Coeff)     t-ratio    P-value
+Intercept       320.528         222.2          1.44        0.1537
+Climb             1.755           0.088       19.8       < 0.0001
+\end{verbatim}
+
+We see that the time is greater, on average, by 1.75 seconds per meter of climb. The $R^2$ value of 85.2\% assures us that the fit of the model is good with 85.2\% of the variance in women's records accounted for by a regression on the climb.
+
+But surely that isn't all there is to these races. Longer races should take more time to run. And although an $R^2$ of 0.852 is good, it does leave almost 15\% of the variance unaccounted for. 
+
+Multiple regression models work the same way as simple regression models, but include two or more predictors. Most statistics programs fit multiple regressions in the same way as simple ones; you just need to find the way your program wants you to specify more than one predictor.
+
+Here is the regression with both Climb and Distance as predictors:
+
+\begin{verbatim}
+Response variable is:	Women's Record
+R squared = 97.5%     R squared (adjusted) = 97.4%
+s = 468.0  with  70 - 3 = 67  degrees of freedom 
+Variable      Coefficient  SE(Coeff)     t-ratio   P-value
+Intercept     -497.656     102.8         -4.84     < 0.0001
+Distance       387.628      21.45        18.1      < 0.0001
+Climb            0.852       0.0621      13.7      < 0.0001
+\end{verbatim}
+
+This regression model shows both the distance and the climb as predictors and has an $R^2$ of 0.975---a substantial improvement. More interesting, the coefficient of {\tt Climb} has changed from 1.75 to 0.85. That's because in a multiple regression, we interpret each coefficient as the effect of its variable on y after allowing for the effects of the other predictors.
+
+\section{\textbf{Closing thoughts}}
+
 
 Multivariable thinking is critical to make sense of the observational data around 
 us.  
@@ -336,40 +377,4 @@ discipline only suitable for small sample inference of randomized studies.
 
 
 Multivariable models are necessary when we want to model many aspects of the world more realistically. The real world is complex and can't be described well by one or two variables. Simple examples are valuable for introducing concepts, but when we don't show students realistic models they are left with the impression that statistics is trivial and not really useful. This report recommends that students be introduced to multivariable thinking---preferably early in the introductory course and not as an afterthought at the end of the course.
-
-The most common multivariable model is a multiple regression. Regression can be introduced as soon as students have seen scatterplots and thought about the patterns we look for in them. When students have access to a statistics program on a computer, they can find regression analyses for themselves. But even without computer access, they can learn about typical regression output tables.
-The point is to show students a model involving three (or more) variables and discuss some of the subtleties of such models. Here is one example:
-
-Scottish hill races are scheduled throughout the year and throughout the country of Scotland (\url{http://www.scottishhillracing.co.uk}). The official site gives the current records (in seconds) for men and women in these races along with facts about each race including the distance covered (in km) and the total amount of hill climbing (in meters). Naturally, both the distance and the climb affect the record times. So a simple regression to predict time from either one would miss an important aspect of the races.
-
-For example, the simple regression of time vs climb for women’s records looks like this:
-\begin{verbatim}
-Response variable is:	Womens Record
-R squared = 85.2%     R squared (adjusted) = 84.9%
-s = 1126  with  70-2 = 68  degrees of freedom 
-
-Variable        Coefficient     SE(Coeff)     t-ratio    P-value
-Intercept       320.528	        222.2          1.44        0.1537
-Climb	          1.75493         0.088       19.8       < 0.0001
-\end{verbatim}
-
-From which we see that the time is greater, on average, by 1.75 seconds per meter of climb. The $R^2$ value of 85.2\% assures us that the fit of the model is good with 85.2\% of the variance in women’s records accounted for by a regression on the climb.
-
-But surely that isn't all there is to these races. Longer races should take more time to run. And although an $R^2$ of 85.2\% is good, it does leave almost 15\% of the variance unaccounted for. 
-
-Multiple regression models work the same way as simple regression models, but include two or more predictors. Most statistics programs fit multiple regressions in the same way as simple ones; you just need to find the way your program wants you to specify more than one predictor.
-
-Here is the regression with both Climb and Distance as predictors:
-
-\begin{verbatim}
-Response variable is:	Womens Record
-R squared = 97.5%     R squared (adjusted) = 97.4%
-s = 468.0  with  70 - 3 = 67  degrees of freedom 
-Variable      Coefficient    SE(Coeff)     t-ratio   P-value
-Intercept     -497.656       102.8         -4.84     < 0.0001
-Distance       387.628        21.45         18.1     < 0.0001
-Climb            0.852282      0.0621       13.7     < 0.0001
-\end{verbatim}
-
-This regression model shows both the distance and the climb as predictors and has an $R^2$ of 97.5\%--a substantial improvement. More interesting, the coefficient of Climb has changed from 1.75 to 0.85. That's because in a multiple regression, we interpret each coefficient as the effect of its variable on y after allowing for the effects of the other predictors.
 
