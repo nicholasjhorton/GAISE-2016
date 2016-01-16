@@ -1,7 +1,7 @@
 ---
 title: 'GAISE: Multivariate Appendix'
-author: "Nicholas Horton (nhorton@amherst.edu)"
-date: "January 15, 2016"
+author: "GAISE group, primary contact Nicholas Horton (nhorton@amherst.edu)"
+date: "January 16, 2016"
 output:
   word_document:
     fig_height: 3
@@ -43,198 +43,138 @@ opts_chunk$set(
 
 The new ASA guidelines for undergraduate programs in statistics recommend that students obtain a clear understan
 ding of principles of statistical design and tools to assess and account for the possible impact of other measur
-ed and unmeasured confounding variables (ASA, 2014).  (See also Wild's "On locating statistics in the world of finding out", http://arxiv.org/abs/1507.05982.)
+ed and unmeasured confounding variables (ASA, 2014).  (possible footnote: See also Wild's "On locating statistics in the world of finding out", http://arxiv.org/abs/1507.05982.)
 An introductory statistics course cannot cover these topics in depth, but it is important to expose students to 
 them even in their first course (Meng, 2011).
 
 Perhaps the best place to start is to consider how a third variable can change our understanding of the relationship between two variables. 
 
-In this appendix we describe simple examples where a third factor clouds the association between two other variables.  Simple approaches (such as stratification) can help to discern the true associations. Stratification requires no advanced methods, nor even any inference (though some instructors may incorporate other related concepts and approaches such as multiple regression). These examples can help to introduce students to techniques for assessing relationships between more than two variables.  (The *Journal of Statistics Education* Datasets and Stories department features a number of interesting multivariable examples that feature confounding.)
+In this appendix we describe simple examples where a third factor clouds the association between two other variables.  Simple approaches (such as stratification) can help to discern the true associations. Stratification requires no advanced methods, nor even any inference (though some instructors may incorporate other related concepts and approaches such as multiple regression). These examples can help to introduce students to techniques for assessing relationships between more than two variables.  (possible footnote: The *Journal of Statistics Education* Datasets and Stories department features a number of interesting multivariable examples that feature confounding.)
 
 What is especially concerning in a first (and often only) statistics course is that the simple examples we use to introduce statistics concepts can give students the false impression that all data come from well-conducted randomized trials with no dropout, full adherence, and sufficient blinding and that regression models always include all the appropriate predictors. We hope that introductory statistics courses can open students' eyes to the complexity of real data and the need to take that complexity into account.
 
 Including one or more multivariable examples early in an introductory statistics course may help to prepare students to deal with more than one or two variables at a time.
 
 
-\section{\textbf{Smoking in Whickham}}
+### Smoking in Whickham
 
 
 A follow-up study of 1,314 people in Whickham, England characterized smoking
-status at baseline, then mortality after 10 years\cite{appl:1996}.  The data are provided in 
-Table \ref{tab:whick1}.
+status at baseline, then mortality after 10 years (Appleton et al, 1996).  The summary data are provided in the following table:
 
-\begin{table}[!ht]
-\begin{center}
-\begin{tabular}{|l|l|l|}
-\hline
-SMOKER & Alive & Dead \\ \hline
-No & 502 (68.6\%) & 230 (31.4\%) \\ \hline
-Yes & 443 (76.1\%) & 139 (23.9\%) \\ \hline
-\end{tabular}
-\caption{Distribution of smoking status and mortality status (after ten years) from the Whickham study}
-\label{tab:whick1}
-\end{center}
-\end{table}
+```
+SMOKER   Alive        Dead 
+No       502 (68.6%)  230 (31.4%) 
+Yes      443 (76.1%)  139 (23.9%) 
+```
 
 We see that the risk of dying is lower for smokers than for non-smokers, since 
-31.4\% of the non-smokers died, but only 23.9\% of the smokers did not survive over the ten year period.  
+31.4% of the non-smokers died, but only 23.9% of the smokers did not survive over the ten year period.  
 
-A graphical representation using a mosaicplot (also known as an \emph{Eikosogram}) represents the cell 
+A graphical representation using a mosaicplot (also known as an *Eikosogram*) represents the cell 
 probabilities as a function of area.  
 
-\begin{figure}[bh]
-<<whick1,warning=FALSE, fig.height=4.8,message=FALSE,echo=FALSE>>=
+```{r echo=FALSE, message=FALSE}
 require(gmodels); require(mosaic)
 Whickham <- mutate(Whickham,
-                   agegrp = cut(age, breaks=c(1, 44, 64, 100), labels=c("18-44", "45-64", "65+")))
-mosaicplot(tally(~ outcome + smoker, data=Whickham), ylab="Smoking status", 
-  xlab="Mortality status (after 10 years)", main="", color=TRUE)
+    agegrp = cut(age, breaks=c(1, 64, 100), labels=c("18-64", "65+")))
+mosaicplot(tally(~ smoker + outcome, data=Whickham), xlab="Smoking status", 
+  ylab="Mortality status\n(after 10 years)", main="Association of smoking and mortality", color=TRUE)
 # with(Whickham, CrossTable(smoker, outcome, prop.c=FALSE, prop.chisq=FALSE, prop.t=FALSE))
-@
-\caption{Mosaicplot representing the association between smoking status and mortality in the Whickham
-study}
-\label{fig:whick1}
-\end{figure}
+# with(filter(Whickham, agegrp=="18-64"), CrossTable(smoker, outcome, prop.c=FALSE, prop.chisq=FALSE, prop.t=FALSE))
+# with(filter(Whickham, agegrp=="65+"), CrossTable(smoker, outcome, prop.c=FALSE, prop.chisq=FALSE, prop.t=FALSE))
+```
+
 
 We note that the majority of subjects have survived, but that
-the area for the smokers who are still alive is larger than we would expect if there were no 
+the number of the smokers who are still alive is greater than we would expect if there were no 
 association between these variables.
 What could explain this result?
 
-Let's consider stratification by age of the participants.  Table \ref{tab:whick2} and Figure \ref{fig:whick2} displays the relationship
-between smoking and mortality over a 10--year period for those age 18--44, those 45-64, and subjects that were 65 or older at baseline.
-\begin{table}[!ht]
-\begin{center}
-\begin{tabular}{|l|l|l|l|}
-\hline
-Baseline age & SMOKER & Alive & Dead \\ \hline \hline
-18-44 & No & 327 (96.5\%) & 12 (3.5\%) \\  \hline
-18-44 & Yes & 270 (94.7\%) & 15 (5.3\%) \\ \hline \hline
-45-64 & No & 147 (73.5\%) & 53 (26.5\%) \\ \hline
-45-64 & Yes & 167 (67.6\%) & 80 (32.4\%) \\ \hline \hline
-65+ & No & 28 (14.5\%) & 165 (85.5\%) \\ \hline
-65+ & Yes & 6 (12.0\%) & 44 (88.0\%) \\ \hline 
-\end{tabular}
-\caption{Distribution of smoking status and mortality status (after 10 years) stratified by age (at baseline) from the Whickham study}
-\label{tab:whick2}
-\end{center}
-\end{table}
+Let's consider stratification by age of the participants (older vs. younger).  The following table and figure display the relationship
+between smoking and mortality over a 10-year period for two groups: those age 18-64 and subjects that were 65 or older at baseline.
 
-\begin{figure}[bhp]
-\includegraphics[width=5.0in]{includes/Whickham.pdf}
-\caption{Mosaicplot representing the association between mortality and smoking status (stratified by baseline age) in the Whickham study}
-\label{fig:whick2}
-\end{figure}
+```
+Baseline age  SMOKER    Alive          Dead 
+18-64         No        474 (87.9%)    65 (12.1%) 
+18-64         Yes       437 (82.1%)    95 (17.9%) 
+65+           No         28 (14.5%)   165 (85.5%) 
+65+           Yes         6 (12.0%)    44 (88.0%) 
+```
 
-<<whick2,warning=FALSE, message=FALSE,echo=FALSE>>=
+```{r, echo=FALSE}
+mosaicplot(tally(~ smoker + outcome, data=filter(Whickham, agegrp=="18-64")),
+           xlab="Smoking status", ylab="Mortality status\n(after 10 years)",
+           main="Results for 18-64 year olds at baseline", color=TRUE)
+mosaicplot(tally(~ smoker + outcome, data=filter(Whickham, agegrp=="65+")),
+           xlab="Smoking status", ylab="Mortality status\n(after 10 years)",
+           main="Results for those 65+ years old at baseline", color=TRUE)
+```
+
+
+```{r whick2,eval=FALSE,warning=FALSE, message=FALSE,echo=FALSE}
 require(gmodels); require(mosaic)
 #with(filter(Whickham, agegrp=="18-44"), CrossTable(smoker, outcome, prop.c=FALSE, prop.chisq=FALSE, prop.t=FALSE))
-@
+```
 
-We see that mortality rates are low for the youngest group, but the mortality rate is slightly higher for smokers than non-smokers (5.3\% for smokers vs 3.5\% for non-smokers).  (Given such low baserates, the information value of the first of the three stratified mosaicplots is low.)
+We see that mortality rates are low for the younger group, but the mortality rate is slightly higher for smokers than non-smokers (17.9% for smokers vs 12.1% for the non-smokers).
 
-Similar results are seen 
-for subjects who are between 45--64 years old at baseline: smokers have a higher
-probability of mortality than non-smokers.
-\marginnote{Smoking is ``bad" within each of the subgroups of age, while smoking is ``good" overall.}
+(possible foonote: Smoking is "bad" within both of the subgroups of age, while smoking is "good" overall.)
+
 Almost all of the participants who were 65 or older at baseline died during the followup period, but the 
 probability of dying was also slightly higher for smokers than non-smokers.
 
-This example represents a classic example of \emph{Simpson's paradox}\cite{simp:1951,nort:divi:2015}, where 
-overall smoking appears to be ``protective", but within each age group smokers have a higher probability
+This example represents a classic example of *Simpson's paradox* (Simpson, 1951; Norton and Divine, 2015), where 
+overall smoking appears to be "protective", but within each age group smokers have a higher probability
 of dying than non-smokers.
 
 
 
-How can this be happening?  Figure \ref{fig:whickage1} and Table \ref{tab:whickage1} help
+How can this be happening?  The following figure and table
 us to disentangle these relationships.  
 
-\begin{figure}[bh]
-<<whickage1,warning=FALSE, fig.height=4.8,message=FALSE,echo=FALSE>>=
-mosaicplot(tally(~ agegrp + outcome, data=Whickham), ylab="mortality status (after 10 years)", 
-  xlab="Age group", main="", color=TRUE)
-#with(Whickham, CrossTable(agegrp, smoker, prop.c=FALSE, prop.chisq=FALSE, prop.t=FALSE))
-@
-\caption{Mosaicplot representing the association between mortality and age in the Whickham
-study}
-\label{fig:whickage1}
-\end{figure}
+```{r whickage1,warning=FALSE, message=FALSE,echo=FALSE}
+mosaicplot(tally(~ agegrp + outcome, data=Whickham), ylab="Mortality status\n(after 10 years)", 
+  xlab="Age group", main="Association between age and mortality", color=TRUE)
+# with(Whickham, CrossTable(agegrp, smoker, prop.c=FALSE, prop.chisq=FALSE, prop.t=FALSE))
+```
 
-
-\begin{table}[htpb]
-\begin{center}
-\begin{tabular}{|l|l|l|}
-\hline
-Age group & Alive & Dead \\ \hline
-18-44 & 597 (95.7\%) & 27 (4.3\%) \\ \hline
-45-64 & 314 (70.2\%) & 133 (29.8\%) \\ \hline
-65+ & 34 (14.0\%) & 209 (86.0\%) \\ \hline
-\end{tabular}
-\caption{Distribution of age group and mortality status (after 10 years) 
-from the Whickham study}
-\label{tab:whickage1}\end{center}
-\end{table}
 
 Not surprisingly, we see that
 mortality rates are highest for the oldest subjects.
 
 We also observe that 
-there is an association between age group and smoking status, as displayed in 
-Figure \ref{fig:whickage2} and Table \ref{tab:whickage2}.
+there is an association between age group and smoking status, as displayed in the following figure and table.
 
-\begin{figure}[bh]
-<<whickage2,warning=FALSE, fig.height=3.8,message=FALSE,echo=FALSE>>=
+```{r warning=FALSE, message=FALSE,echo=FALSE}
 mosaicplot(tally(~ agegrp + smoker, data=Whickham), ylab="smoking status", 
-  xlab="Age group", main="", color=TRUE)
-@
-\caption{Mosaicplot representing the association between smoking status and age in the Whickham
-study}
-\label{fig:whickage2}
-\end{figure}
+  xlab="Age group", main="Association of age and smoking status", color=TRUE)
+```
 
-\begin{table}[htpb]
-\begin{center}
-\begin{tabular}{|l|l|l|}
-\hline
-Age group & Non-smoker & Smoker \\ \hline
-18-44 & 339 (54.3\%) & 285 (45.7\%) \\ \hline
-45-64 & 200 (44.7\%) & 247 (55.3\%) \\ \hline
-65+ & 193 (79.4\%) & 50 (20.6\%) \\ \hline
-\end{tabular}
-\caption{Distribution of age group and smoking status (at baseline) 
-from the Whickham study}
-\label{tab:whickage2}\end{center}
-\end{table}
+```
+Age group  Non-smoker    Smoker 
+18-64      539 (50.3%)   532 (49.7%) 
+65+        193 (79.4%)    50 (20.6%)
+```
 
-Smoking is also associated with age, with those between
-the ages of 45 to 64 most likely to have been smokers at baseline.  
+Smoking is associated with age, with younger subjects more likely to have been smokers at baseline.  
 
-
-After controlling for age, smokers have a higher
-rate of mortality than non-smokers in this study.
-<<whick4,warning=FALSE, message=FALSE,echo=FALSE>>=
-#with(filter(Whickham, agegrp=="65+"), CrossTable(smoker, outcome, prop.c=FALSE, prop.chisq=FALSE, prop.t=FALSE))
-@
-
+What should we conclude? After controlling for age, smokers have a higher
+rate of mortality than non-smokers in this study. This other factor is important when considering the association between smoking and mortality.
 
 Simple methods such as stratification can allow students to think beyond two 
 dimensions and reveal effects of confounding variables.  Introducing this
 thought process early on helps students easily transition to analyses involving multiple explanatory variables.
 
 
+### SAT scores and teacher salaries 
 
+Consider an example where statewide data from the mid-1990's are used to assess the association between average teacher salary in the state and average SAT (Scholastic Aptitude Test) scores for students (Guber, 1999; Horton, 2015). These high stakes high school exams are sometimes used as a proxy for educational quality. 
 
-
-\section{\textbf{SAT scores and teacher salaries}}
-
-Consider an example where statewide data from the mid-1990's are used to assess the association between average teacher salary in the state and average SAT (Scholastic Aptitude Test) scores for students 
-\cite{gube:1999} \cite{hort:2015}.  These high stakes high school exams are sometimes used as a proxy for educational quality.  
-Figure \ref{fig:sat} displays the (unconditional) association between these variables.  There is a statistically significant negative relationship ($\hat{\beta_1}$=-5.54 points, $p=0.001$). The model predicts that a state with an average salary that is one thousand dollars
+The following figure displays the (unconditional) association between these variables.  There is a statistically significant negative relationship ($\hat{\beta_1}$=-5.54 points, $p=0.001$). The model predicts that a state with an average salary that is one thousand dollars
 higher than another would have SAT scores that are on average 5.54 points lower.
 
-\begin{figure}[bh]
-\begin{center}
-<<sat1,fig.height=3.5,fig.width=5.8,message=FALSE,echo=FALSE,warning=FALSE>>=
+```{r sat1,fig.height=3.5,fig.width=5.8,message=FALSE,echo=FALSE,warning=FALSE}
 require(mosaic); require(mosaicData)
 trellis.par.set(theme=col.mosaic(bw=TRUE)); options(digits=3)
 mod1 <- lm(sat ~ salary, data=SAT)
@@ -246,23 +186,17 @@ labels=c("low fraction", "medium fraction", "high fraction")))
 xyplot(sat ~ salary, type=c("r", "p"),
                xlab="Average teacher salary (in thousands of $)",
                ylab="State average SAT score", data=SAT)
-@
-\caption{Association of state average teacher salary with average SAT score}
-\label{fig:sat}
-\end{center}
-\end{figure}
+```
 
-
-But the real story is hidden behind one of the ``other factors" that we warn students about but do not generally teach how to address!  The proportion of students taking the SAT varies dramatically between states, as do teacher salaries.
-In the midwest and plains states, where teacher salaries tend to be lower, relatively few high school students take the SAT exam.  
-These are
+But the real story is hidden behind one of the "other factors" that we warn students about but do not generally teach how to address!  The proportion of students taking the SAT varies dramatically between states, as do teacher salaries.
+In the midwest and plains states, where teacher salaries tend to be lower, relatively few high school students take the SAT exam. Those that do are
 typically the top students who are planning to attend college out of state, while many others take the
 alternative standardized ACT test.  For each of the three groups of states defined by the fraction taking the SAT, the association is 
 non-negative.  The net result is that the fraction
 taking the SAT is a confounding factor.  
 
 This problem is a continuous example of Simpson's paradox.
-Statistical thinking with an appreciation of Simpson's paradox would alert a student to \emph{look for} the hidden confounding variables.
+Statistical thinking with an appreciation of Simpson's paradox would alert a student to *look for* the hidden confounding variables.
 To tackle this problem, students need to know that multivariable modeling exists (but not all aspects
 of how it can be utilized).
 
@@ -272,35 +206,29 @@ states up into groups based on the fraction of
 students taking the SAT it is possible to account for this confounder and use 
 bivariate methods to assess the relationship for each of the groups.
 
-The scatterplot in Figure \ref{fig:sat2} displays a grouping of
-states with 0-22\% of students (``low fraction", top line), 23-49\% of students (``medium fraction", middle line), and
-50-81\% (``high fraction", bottom line). The story is clear: there is a positive or flat relationship between teacher salary
+The scatterplot in the next figure displays a grouping of
+states with 0-22% of students ("low fraction", top line), 23-49% of students ("medium fraction", middle line), and
+50-81% ("high fraction", bottom line). The story is clear: there is a positive or flat relationship between teacher salary
 and SAT score for each of these groups, but when we average over them, we observe a negative relationship.
 
 
 
-\begin{figure}[tpbh]
-\begin{center}
-<<sat2,fig.height=5.2,fig.width=6.7,echo=FALSE,message=FALSE,warning=FALSE>>=
+```{r sat2,fig.height=5.2,fig.width=6.7,echo=FALSE,message=FALSE,warning=FALSE}
 xyplot(sat ~ salary, type=c("r", "p"), groups=fracgrp, auto.key=TRUE, 
        xlab="Average teacher salary (in thousands of $)", 
        ylab="State average SAT score", data=SAT)
-@
-\caption{Association between teacher salary and SAT score after accounting for the fraction of students taking the SAT in that state}
-\label{fig:sat2}
-\end{center}
-\end{figure}
+```
 
-<<>>=
+```{r message=FALSE, echo=FALSE}
 require(GGally)
 ggpairs(select(SAT, salary, sat, frac))
-@
+```
 
-Further light is shed via a matrix of scatterplots (see the above Figure): we see that
+Further light is shed via a matrix of scatterplots (see the above figure): we see that
 the fraction of students taking the SAT is negatively associated with the average statewide SAT scores and positively associated with statewide teacher salary.
 
 Recall that in a multiple regression model that controls for the fraction of students taking the SAT variable, the
-sign of the slope parameter for teacher salary flips from negative to positive.} 
+sign of the slope parameter for teacher salary flips from negative to positive. 
 
 It's important to have students look for possible confounding factors when the relationship isn't what they expect, but it is also important when the relationship is what is expected.  It's not always possible to stratify by factors (particularly if important confounders are not collected).  
 
@@ -362,12 +290,21 @@ discipline only suitable for small sample inference of randomized studies.
 Multivariable models are necessary when we want to model many aspects of the world more realistically. The real world is complex and can't be described well by one or two variables. Simple examples are valuable for introducing concepts, but when we don't show students realistic models they are left with the impression that statistics is trivial and not really useful. This report recommends that students be introduced to multivariable thinking: preferably early in the introductory course and not as an afterthought at the end of the course.
 
 
-
-
-
 ### References
 
-ASA (2014).  American Statistical Association Undergraduate Guidelines Workgroup. 2014. "2014 Curriculum Guidelines for Undergraduate Programs in Statistical Science". Alexandria, VA: American Statistical Association, http://www.amstat.org/education/curriculumguidelines.cfm
+Appleton, D. R., and French, J. M. and Vanderpump, M.P. (1996). "Ignoring a covariate: an example of Simpson's paradox", *The American Statistician*, 50(4):340-341.
+        
+ASA (2014).  American Statistical Association Undergraduate Guidelines Workgroup. 2014. "2014 Curriculum Guidelines for Undergraduate Programs in Statistical Science". Alexandria, VA: American Statistical Association, http://www.amstat.org/education/curriculumguidelines.cfm.
 
-Meng, X.L. (2011).  Statistics: Your chance for happiness (or misery), *The Harvard Undergraduate Research Journal*, 2(1), http://thurj.org/as/2011/01/1259.
+Guber, D. L. (1999). "Getting what you pay for: the debate over equity in public school expenditures", *Journal of Statistics Education*, 7(2).
+
+Horton, N.J. (2015), "Challenges and opportunities for statistics and statistical education: Looking back, looking forward, *The American Statistician*, 69(2):138–145.
+   
+Meng, X.L. (2011).  "Statistics: Your chance for happiness (or misery)", *The Harvard Undergraduate Research Journal*, 2(1), http://thurj.org/as/2011/01/1259.
+
+Norton, H. J. and Divine, G. (2015).  "Simpson's paradox, and how to avoid it", *Significance*, 40-43.
+
+Simpson, E. H. (1951).  "The interpretation of interaction in contingency tables", *Journal of the Royal Statistical Society, Series B*, 13:238-241.
+
+
 
