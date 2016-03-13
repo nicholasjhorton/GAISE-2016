@@ -1,0 +1,116 @@
+---
+title: "GAISE draft results"
+author: "Nicholas Horton (nhorton@amherst.edu)"
+date: "March 13, 2016"
+output: 
+  pdf_document:
+    fig_height: 3
+    fig_width: 5
+  html_document:
+    fig_height: 3
+    fig_width: 5
+  word_document:
+    fig_height: 3
+    fig_width: 5
+---
+
+
+```{r, include=FALSE}
+library(mosaic)
+```
+
+```{r, include=FALSE}
+# Some customization.  You can alter or delete as desired (if you know what you are doing).
+
+# This changes the default colors in lattice plots.
+trellis.par.set(theme=theme.mosaic())  
+
+# knitr settings to control how R chunks work.
+require(knitr)
+opts_chunk$set(
+  tidy=FALSE,     # display code as typed
+  comment=NA,
+  size="small"    # slightly smaller font for code
+)
+options(digits=3)  
+```
+
+#### Load data and rename variables
+```{r}
+require(mosaic); require(readxl)
+ds <- read_excel("GAISE_Update_2016-03-11.xls")
+names(ds) <- c("name", "affiliation", "email", 
+               "followup", "affil", "affil2",
+               "execsum", "intro", "goals", 
+               "omit", "reordered", "other1",
+               "appendixA", "appendixB", "appendixC",
+               "appendixD", "appendixE", "appendixF",
+               "other2")
+nrow(ds)
+```
+
+
+#### Comments on the report Executive Summary: - Open-Ended Response                                                                  
+```{r}
+processtext <- function(response, exdent=3) {
+  response <- response[!is.na(response)]
+  writeLines(strwrap(response, exdent=exdent, width=90))
+}
+processtext(ds$execsum)
+```
+
+#### Comments on the goals                                                               
+```{r}
+processtext(ds$goals)
+```
+
+#### Topics to omit                                                               
+```{r}
+processtext(ds$omit)
+```
+
+
+#### Reordered goals                                                              
+```{r}
+processtext(ds$reordered)
+```
+
+#### Other comments (1 of 2)                                                               
+```{r}
+processtext(ds$other1)
+```
+
+#### Appendix A                                                             
+```{r}
+processtext(ds$appendixA)
+```
+
+#### Appendix B                                                              
+```{r}
+processtext(ds$appendixB)
+```
+
+#### Appendix C                                                               
+```{r}
+processtext(ds$appendixC)
+```
+
+#### Appendix D                                                               
+```{r}
+processtext(ds$appendixD)
+```
+
+#### Appendix E                                                               
+```{r}
+processtext(ds$appendixE)
+```
+
+#### Appendix F                                                               
+```{r}
+processtext(ds$appendixF)
+```
+
+#### Other comments (2 of 2)                                                               
+```{r}
+processtext(ds$other2)
+```
